@@ -1,0 +1,90 @@
+---
+title: Webcam (HSV)
+description: Set up your control hub webcam using the HSV vision processor
+---
+import { Aside } from '@astrojs/starlight/components';
+import { Badge } from '@astrojs/starlight/components';
+
+HSV track: The model-free track: no Limelight, no TensorFlow, no model — a pure color-threshold VisionProcessor runs on the Control Hub itself and reports ball candidates.
+
+Candidate detector, not a guaranteed detector. Measured precision on the dev video: yellow 40%, red 26%, blue 66%. Treat every blob as a candidate — require 3–5 consecutive frames at the same normalized position before the robot acts on it.
+
+import { Steps, FileTree } from '@astrojs/starlight/components';
+import { Code } from '@astrojs/starlight/components';
+import CodeBlock from './BallDetectorPipeline.java?raw';
+import telemetry from './telemetrySnippet.java?raw';
+
+
+<Aside type="note">This installation is for Webcam for control hub only, please refer to the `Installation` menu for other camera setups!</Aside>
+
+Prerequisites:
+
+- <Badge text="Webcam (Logitech recommended)" variant="note" />
+- <Badge text="Control Hub" variant="success" />
+- <Badge text="IDE code editor" variant="tip" />
+- <Badge text="MacOS, Linux, or Windows computer" variant="caution" />
+
+## Installation
+
+
+<Steps>
+1. **Add `BallDetectorPipeline.java`** in `TeamCode/` of your FTC project
+
+   <FileTree>
+   - TeamCode
+     - java
+       - org.firstinspires.ftc.teamcode
+         - BallDetectorPipeline.java //Add this
+   </FileTree>
+
+2. **Paste in** the code from [here](https://github.com/hivevisionftc/Hive-Vision/blob/main/lab/TeamCode/LabBallDetectorPipeline.java)
+3. Below that file in `TeamCode/`, add a file called `BallBlobPipeline.java`, this will act as your base program.
+
+   <FileTree>
+   - TeamCode
+     - java
+       - org.firstinspires.ftc.teamcode
+         - BallDetectorPipeline.java
+         - BallBlobPipeline.java //Add this
+   </FileTree>
+
+4. **Paste in** the code from [here](https://github.com/hivevisionftc/Hive-Vision/blob/main/cv/TeamCode/BallBlobPipeline.java)
+
+5. **Register** a new opmode with the following code, rename `"Webcam 1"` according to your webcam configuration name in the Driver Station.
+   <FileTree>
+   - TeamCode
+     - java
+       - org.firstinspires.ftc.teamcode
+         - BallDetectorPipeline.java
+         - BallBlobPipeline.java
+         - HiveVisionOpmode.java //Add this
+   </FileTree>
+
+   <Code code={CodeBlock} lang="java" wrap />
+
+6. Add **telemetry** for your pipeline's active detections within the same opmode.
+   <Code code={telemetry} lang="java" wrap />
+   `bestOf(...)` returns null when no blob of that color passes the gates, and a BallBlob with `cxNorm / cyNorm` (0–1 screen-relative, centered) otherwise. Colors are `BallColor.YELLOW, BallColor.RED, BallColor.BLUE.`
+
+7. If your camera's resolution is ** NOT 1920 x 1080**, follow these steps, otherwise continue to step 8.
+
+8. **Verify in 5 minutes**
+         1. Deploy your code, and run your `OpMode` in the driver station, open `camera stream` with the right 3 dots
+         ---
+         2. Put a pollen in the FOV of the webcam, to see an outline box around the entity
+         ---
+         3. Slide in across the FOV to see the telemetry value `cxNorm` move from 0 to 1 (left to right)
+         ---
+         4. Repeat the same with the blue and red nectar.
+         ---
+         ![A rocketship in space](./public/webcam.png)
+
+
+
+</Steps>
+
+
+
+
+
+Success! Congratulations on setting up Hive Vision for your  Webcam! Refer to the `Usages` panel, for how to apply this Neural Network in FTC working code!

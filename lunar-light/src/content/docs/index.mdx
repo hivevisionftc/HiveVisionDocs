@@ -1,10 +1,11 @@
+
 ---
 title: Hive Vision
 description: Vision library for your FTC team!
 template: splash
 # Remove or comment out this line to display the site sidebar on this page.
 hero:
-  tagline: Vision library for your FTC team!
+  tagline: Powerful vision library, at the tip of your finger
   image:
     file: /public/hive.png
   actions:
@@ -15,7 +16,11 @@ hero:
       variant: minimal
 ---
 
+import { Aside } from '@astrojs/starlight/components';
+import { Badge } from '@astrojs/starlight/components';
 import { CardGrid } from '@astrojs/starlight/components';
+import { Code } from '@astrojs/starlight/components';
+import { Steps, FileTree } from '@astrojs/starlight/components';
 
 ## Neural Networking
 
@@ -63,50 +68,15 @@ import { CardGrid } from '@astrojs/starlight/components';
   </div>
 </CardGrid>
 
-## Examples
-<CardGrid>
-  {/* Panel 1 */}
-  <div style={{
-    border: '1px solid var(--sl-color-hairline-light, #e2e8f0)',
-    borderRadius: '8px',
-    overflow: 'hidden',
-    backgroundColor: 'var(--sl-color-bg-nav, #ffffff)',
-    display: 'flex'
-  }}>
-    <video
-      autoPlay
-      loop
-      muted
-      playsInline
-      width="100%"
-      style={{ display: 'block', objectFit: 'cover' }}
-    >
-      <source src="/47Beavers.mp4" type="video/mp4" />
-      Your browser does not support the video tag.
-    </video>
-  </div>
 
-  {/* Panel 2 */}
-  <div style={{
-    border: '1px solid var(--sl-color-hairline-light, #e2e8f0)',
-    borderRadius: '8px',
-    overflow: 'hidden',
-    backgroundColor: 'var(--sl-color-bg-nav, #ffffff)',
-    display: 'flex'
-  }}>
-    <video
-      autoPlay
-      loop
-      muted
-      playsInline
-      width="100%"
-      style={{ display: 'block', objectFit: 'cover' }}
-    >
-      <source src="/demo.mp4" type="video/mp4" />
-      Your browser does not support the video tag.
-    </video>
-  </div>
-</CardGrid>
+
+
+
+
+
+
+
+
 
 <style>`
   .hero img {

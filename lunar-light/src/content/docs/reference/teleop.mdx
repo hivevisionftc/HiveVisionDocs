@@ -1,0 +1,51 @@
+---
+title: TeleOp
+description: A working TeleOp for testing purposes for your Limelight 3a presented by 13100 - 47 Beavers
+---
+import { Aside } from '@astrojs/starlight/components';
+import { Badge } from '@astrojs/starlight/components';
+import { CardGrid } from '@astrojs/starlight/components';
+import { Code } from '@astrojs/starlight/components';
+import { Steps, FileTree } from '@astrojs/starlight/components';
+
+How this code works:
+
+During the initializing period:<br></br>
+• D-pad UP: Selects RED balls only. <br></br>
+• D-pad DOWN: Selects BLUE balls only.<br></br>
+• D-pad LEFT: Selects both RED and BLUE balls.<br></br>
+• D-pad RIGHT: Selects all colors (RED, BLUE, and YELLOW).<br></br>
+
+During Teleop:<br></br>
+• Right Bumper (RB): Toggles Auto-Chase mode ON or OFF<br></br>
+<Aside type="tip">During Auto-Chase, your robot will spin and go to balls on its own, do not use your joystick during this state.</Aside><br></br>
+• Left Stick (Y-axis): Drives Forward / Backward.<br></br>
+• Left Stick (X-axis): Strafes Left / Right (Mecanum functionality).<br></br>
+• Right Stick (X-axis): Turns Left / Right in place.<br></br>
+• Left Bumper (LB): Runs the Intake manually at full power (stops running when released).<br></br>
+
+
+<Aside type="note">This code will ONLY work on a Limelight 3a, please look at the usages menu for your camera. </Aside>
+
+Video
+<video
+      autoPlay
+      loop
+      muted
+      playsInline
+      width="100%"
+      style={{ display: 'block', objectFit: 'cover' }}
+    >
+      <source src="/47Beavers.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+
+## Quickstart:
+https://github.com/hivevisionftc/Hive-Vision/blob/main/demo/workingCode/teleopLimelight.java
+
+## Adapt to your robot:
+<Steps>
+    1. Change your limelight pipeline to your Hive Vision neural network from `Installation`
+    2. Change your limelight configuration to the one listed in your `Driver Station`
+</Steps>
+
