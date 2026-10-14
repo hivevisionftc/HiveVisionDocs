@@ -56,10 +56,28 @@ export default defineConfig({
             { label: 'Webcam', slug: 'installation/webcam'}
           ],
         },
-        {
-          label: 'Reference',
-          items: [{ autogenerate: { directory: 'reference' } }],
-        },
+       {
+         label: 'Usages',
+         items: [
+           {
+             label: 'Limelight 3a',
+             collapsed: true, // Makes this folder collapsible
+             items: [
+               { label: 'TeleOp- Driving', link: 'reference/teleop' },
+               { label: 'TeleOp-Pathing', link: 'reference/auto' }
+             ]
+           },
+           {
+             label: 'Folder 2 Name',
+             collapsed: true, // Makes this second folder collapsible
+             items: [
+               { label: 'Tab 3 Name', link: '/usages/tab3' },
+               { label: 'Tab 4 Name', link: '/usages/tab4' }
+             ]
+           }
+         ]
+       }
+
       ],
     }),
   ],

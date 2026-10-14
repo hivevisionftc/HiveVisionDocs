@@ -156,3 +156,12 @@ button[aria-label*="theme"],
   visibility: hidden !important;
   pointer-events: none !important;
 }
+/* Force primary button text to be black so it is readable on the white background */
+.sl-link-button.primary {
+  color: #000000 !important;
+}
+
+/* Optional: Smooth transition and text color swap when hovering over the button */
+.sl-link-button.primary:hover {
+  color: #ffffff !important;
+}

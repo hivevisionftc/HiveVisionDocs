@@ -1,5 +1,5 @@
 ---
-title: TeleOp
+title: TeleOp - Driving
 description: A working TeleOp for testing purposes for your Limelight 3a presented by 13100 - 47 Beavers
 ---
 import { Aside } from '@astrojs/starlight/components';
@@ -8,7 +8,7 @@ import { CardGrid } from '@astrojs/starlight/components';
 import { Code } from '@astrojs/starlight/components';
 import { Steps, FileTree } from '@astrojs/starlight/components';
 
-How this code works:
+**How this code works**:
 
 During the initializing period:<br></br>
 • D-pad UP: Selects RED balls only. <br></br>
@@ -41,9 +41,18 @@ Video
     </video>
 
 ## Quickstart:
-https://github.com/hivevisionftc/Hive-Vision/blob/main/demo/workingCode/teleopLimelight.java
+Add <a href="https://github.com/hivevisionftc/Hive-Vision/blob/main/demo/workingCode/teleopLimelight.java
+" target="_blank" rel="noopener noreferrer">
+this</a> code in your teamcode folder like so
 
+<FileTree>
+   - TeamCode
+     - java
+       - org.firstinspires.ftc.teamcode
+         - teleopLimelight.java //Add this
+   </FileTree>
 ## Adapt to your robot:
+Change the following code
 <Steps>
     1. Change your limelight pipeline to your Hive Vision neural network from `Installation`
     2. Change your limelight configuration to the one listed in your `Driver Station`

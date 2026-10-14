@@ -5,9 +5,9 @@ description: Set up your control hub webcam using the HSV vision processor
 import { Aside } from '@astrojs/starlight/components';
 import { Badge } from '@astrojs/starlight/components';
 
-HSV track: The model-free track: no Limelight, no TensorFlow, no model — a pure color-threshold VisionProcessor runs on the Control Hub itself and reports ball candidates.
+HSV track:  no Limelight, no TensorFlow, no model but rather a pure color-threshold VisionProcessor runs on the Control Hub itself and reports ball candidates.
 
-Candidate detector, not a guaranteed detector. Measured precision on the dev video: yellow 40%, red 26%, blue 66%. Treat every blob as a candidate — require 3–5 consecutive frames at the same normalized position before the robot acts on it.
+Detects in blobs based on color thresholding rather than a pre-trained Tensorflow model like the `Limelight 3a`
 
 import { Steps, FileTree } from '@astrojs/starlight/components';
 import { Code } from '@astrojs/starlight/components';

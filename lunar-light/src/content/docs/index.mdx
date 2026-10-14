@@ -1,19 +1,28 @@
-
 ---
-title: Hive Vision
-description: Vision library for your FTC team!
-template: splash
-# Remove or comment out this line to display the site sidebar on this page.
+title: Welcome to Hive Vision
+head:
+  - tag: title
+    content: Hive Vision
 hero:
   tagline: Powerful vision library, at the tip of your finger
+
   image:
     file: /public/hive.png
   actions:
-
     - text: Read the docs
       link: /overview/overview
       icon: external
+      variant: primary
+    - text: About Us
+      link: /overview/aboutus
+      icon: external
       variant: minimal
+
+---
+
+
+
+
 ---
 
 import { Aside } from '@astrojs/starlight/components';
@@ -83,5 +92,9 @@ import { Steps, FileTree } from '@astrojs/starlight/components';
     max-width: 75% !important;
     height: auto !important;
     margin: 0 auto;
+  }
+  /* target starlight's primary button text color */
+  .sl-link-button.primary {
+    color: #000000 !important;
   }
 `</style>
