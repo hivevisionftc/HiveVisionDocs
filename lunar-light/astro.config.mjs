@@ -38,9 +38,10 @@ export default defineConfig({
       ],
       customCss: ['./src/styles/global.css'],
       // --- UPDATED SOCIAL LINKS FOR NEW TAB BEHAVIOR ---
+
       social: [
-        { icon: 'github', label: 'GitHub', href: 'https://github.com', target: '_blank' },
-        { icon: 'discord', label: 'Discord', href: 'https://discord.gg', target: '_blank' }
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/hivevisionftc', target: '_blank' },
+        { icon: 'discord', label: 'Discord', href: 'https://discord.gg/ga5WphW4QZ', target: '_blank' }
       ],
       sidebar: [
         {
@@ -64,15 +65,14 @@ export default defineConfig({
              collapsed: true, // Makes this folder collapsible
              items: [
                { label: 'TeleOp- Driving', link: 'reference/teleop' },
-               { label: 'TeleOp-Pathing', link: 'reference/auto' }
+               { label: 'TeleOp- Pathing', link: 'reference/auto' }
              ]
            },
            {
-             label: 'Folder 2 Name',
+             label: 'Webcam',
              collapsed: true, // Makes this second folder collapsible
              items: [
-               { label: 'Tab 3 Name', link: '/usages/tab3' },
-               { label: 'Tab 4 Name', link: '/usages/tab4' }
+               { label: 'Teleop- Driving', link: 'reference/webcamteleop' },
              ]
            }
          ]

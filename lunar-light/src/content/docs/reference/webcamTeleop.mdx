@@ -1,0 +1,51 @@
+---
+title: Webcam Teleop- Driving
+description: A simple test-friendly teleop for your Webcam presented by the Hive Vision team.
+---
+import { Aside } from '@astrojs/starlight/components';
+import { Badge } from '@astrojs/starlight/components';
+import { CardGrid } from '@astrojs/starlight/components';
+import { Code } from '@astrojs/starlight/components';
+import { Steps, FileTree } from '@astrojs/starlight/components';
+
+**How this code works**:
+This code acts as an ad-on to the `HiveVisionOpmode.java` that was created at the end of `Webcam` installation. It simply tracks the desired entities in your Webcam's FOV and will drive towards it. This OpMode is liikely not to use during a match but can be taken for inspiration on use cases for your team.
+
+Controls (During the OpMode)
+
+• X Button: Switch target tracking color to BLUE.
+
+• B Button: Switch target tracking color to RED.
+
+• Y Button: Switch target tracking color to YELLOW.
+
+Once any of these buttons are clicked, putting that color of pollen/nectar will cause the robot to drive towards it.
+
+<Aside type="note">This code will ONLY work on a Webcam, please look at the usages menu for your camera. </Aside>
+
+
+
+## Quickstart:
+Since Webcam Installation has been completed, you should be left with a `HiveVisionOpmode.java` in your teamcode, replace that code with <a href="https://github.com/hivevisionftc/Hive-Vision/blob/main/demo/workingCode/HiveVisionOpmode.java
+" target="_blank" rel="noopener noreferrer">
+this</a>
+
+To confirm, your file structure should now look like this
+
+<FileTree>
+   - TeamCode
+     - java
+       - org.firstinspires.ftc.teamcode
+         - BallBlobDetectorPipeline.java
+         - BallDetectorPipeline.java
+         - HiveVisionOpmode.java //This code
+   </FileTree>
+## Adapt to your robot:
+Change the following code
+<Steps>
+    1. Change the webcam name so that it matches the name in your driver station, on line 34
+    2. Similarly, change your drivetrain motor names from lines 21-24 as shown in your driver station
+</Steps>
+
+You are all set! Please refer to the top of the page to learn how to operate the `HiveVisionOpmode`
+

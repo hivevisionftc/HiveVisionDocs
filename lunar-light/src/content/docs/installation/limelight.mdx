@@ -39,7 +39,7 @@ import { Steps } from '@astrojs/starlight/components';
       <img src="/neuralDetector.png" alt="tflite" style={{ width: '65%', height: 'auto', display: 'block', marginTop: '1rem' }} />
 
 
-5. **Download the [`tflite`](https://github.com/sidhuharjas/Hive-Vision/blob/main/neural-net/weights/best_limelight3a_float32.tflite) and [`labels`](https://github.com/sidhuharjas/Hive-Vision/blob/main/neural-net/weights/labels.txt).**
+5. **Download the [`tflite`](https://github.com/hivevisionftc/Hive-Vision/blob/main/releases/v2.0.0/best_limelight3a_ssd_mobilenetv2_300x300_v2_int8_dets25.tflite) and [`labels`](https://github.com/hivevisionftc/Hive-Vision/blob/main/releases/v2.0.0/labels.txt).**
    Save it into a known file for later use.
 
 
@@ -48,6 +48,7 @@ import { Steps } from '@astrojs/starlight/components';
    <img src="/tfliteLocation.png" alt="tflite" style={{ width: '65%', height: 'auto', display: 'block', marginTop: '1rem' }} />
 
 </Steps>
+<Aside type="note">When operating this pipeline through our `Usages` or any code of your own, it is expected that you will need to change `confidence` of your tracking as variation in light, and obstacles can play a role.</Aside>
 
 
 Success! Congratulations on setting up Hive Vision for your Limelight 3A! Refer to the `Usages` panel, for how to apply this Neural Network in FTC working code!
