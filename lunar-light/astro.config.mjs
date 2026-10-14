@@ -6,6 +6,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build
 export default defineConfig({
+    site: 'https://hivevisionftc.github.io'
+    base: '/HiveVisionDocs'
   integrations: [
     starlight({
       plugins: [
