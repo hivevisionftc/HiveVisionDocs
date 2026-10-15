@@ -165,3 +165,10 @@ button[aria-label*="theme"],
 .sl-link-button.primary:hover {
   color: #ffffff !important;
 }
+:root {
+  color-scheme: dark;
+}
+
+html[data-theme='light'] {
+  color-scheme: dark;
+}

@@ -10,6 +10,10 @@ export default defineConfig({
     base: '/HiveVisionDocs',
   integrations: [
     starlight({
+        components: {
+          ThemeProvider: './src/components/ForceDarkTheme.astro',
+          ThemeSelect: './src/components/EmptyComponent.astro',
+        },
       plugins: [
         starlightThemeBlack({
           // --- NAVLINKS FIXED CONTEXT ---
@@ -23,6 +27,7 @@ export default defineConfig({
               link: '/overview/aboutus', // FIX: Set completely to lowercase to match your file position precisely!
             }
           ],
+    disableDarkmodeToggle: true,
 
           // Securely locks dark mode theme layer parameters inside the plugin engine
           disableDarkmodeToggle: true,
@@ -30,7 +35,7 @@ export default defineConfig({
       ],
       title: 'Hive Vision',
                       favicon: '/hive.png',
-defaultTheme: 'dark',
+
       head: [
 
         {
