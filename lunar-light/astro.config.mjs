@@ -7,7 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build
 export default defineConfig({
     site: 'https://hivevisionftc.github.io',
-    base: '/HiveVisionDocs',
+    base: '/HiveVisionDocs/', // Added trailing slash for correct path resolution
   integrations: [
     starlight({
         components: {
@@ -24,20 +24,17 @@ export default defineConfig({
             },
             {
               label: 'About',
-              link: '/overview/aboutus', // FIX: Set completely to lowercase to match your file position precisely!
+              link: '/overview/aboutus',
             }
           ],
-    disableDarkmodeToggle: true,
-
           // Securely locks dark mode theme layer parameters inside the plugin engine
           disableDarkmodeToggle: true,
         }),
       ],
       title: 'Hive Vision',
-                      favicon: '/hive.png',
+      favicon: '/hive.png',
 
       head: [
-
         {
           tag: 'script',
           attrs: {
@@ -45,10 +42,24 @@ export default defineConfig({
             type: 'module',
           },
         },
+        // --- TWITTER CARD META TAGS ---
+        {
+          tag: 'meta',
+          attrs: {
+            name: 'twitter:card',
+            content: 'summary_large_image',
+          },
+        },
+        {
+          tag: 'meta',
+          attrs: {
+            name: 'twitter:image',
+            content: 'https://hivevisionftc.github.io/HiveVisionDocs/hive.png',
+          },
+        },
       ],
-      customCss: ['./src/styles/global.css'],
-      // --- UPDATED SOCIAL LINKS FOR NEW TAB BEHAVIOR ---
 
+      customCss: ['./src/styles/global.css'],
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/hivevisionftc', target: '_blank' },
         { icon: 'discord', label: 'Discord', href: 'https://discord.gg/ga5WphW4QZ', target: '_blank' }
@@ -72,7 +83,7 @@ export default defineConfig({
          items: [
            {
              label: 'Limelight 3a',
-             collapsed: true, // Makes this folder collapsible
+             collapsed: true,
              items: [
                { label: 'TeleOp- Driving', link: 'reference/teleop' },
                { label: 'TeleOp- Pathing', link: 'reference/auto' }
@@ -80,14 +91,13 @@ export default defineConfig({
            },
            {
              label: 'Webcam',
-             collapsed: true, // Makes this second folder collapsible
+             collapsed: true,
              items: [
                { label: 'Teleop- Driving', link: 'reference/webcamteleop' },
              ]
            }
          ]
        }
-
       ],
     }),
   ],
