@@ -95,7 +95,7 @@ export default defineConfig({
         {
           label: 'Installation',
           items: [
-            { label: 'Limelight 3a', slug: 'installation/limelight' },
+            { label: 'Limelight 3A', slug: 'installation/limelight' },
             { label: 'Webcam', slug: 'installation/webcam'}
           ],
         },
@@ -103,7 +103,7 @@ export default defineConfig({
          label: 'Usages',
          items: [
            {
-             label: 'Limelight 3a',
+             label: 'Limelight 3A',
              collapsed: true,
              items: [
                { label: 'TeleOp- Driving', link: 'reference/teleop' },
