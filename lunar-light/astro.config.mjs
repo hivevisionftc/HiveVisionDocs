@@ -30,7 +30,7 @@ export default defineConfig({
       ],
       title: 'Hive Vision',
                       favicon: '/hive.png',
-
+defaultTheme: 'dark',
       head: [
 
         {
