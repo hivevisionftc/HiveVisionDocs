@@ -41,7 +41,7 @@ export default defineConfig({
         {
           tag: 'script',
           attrs: {
-            src: '/honeycomb.js',
+            src: '/HiveVisionDocs/honeycomb.js',
             type: 'module',
           },
         },
