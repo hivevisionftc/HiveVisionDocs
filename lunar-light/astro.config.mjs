@@ -53,7 +53,7 @@ export default defineConfig({
           tag: 'meta',
           attrs: {
             name: 'twitter:image',
-            content: 'https://hivevisionftc.github.io/HiveVisionDocs/hive.png',
+            content: '/HiveVisionDocs/hive.png',
           },
         },
         // --- DISCORD / OPEN GRAPH META TAGS ---
@@ -75,7 +75,7 @@ export default defineConfig({
           tag: 'meta',
           attrs: {
             property: 'og:image',
-            content: 'https://hivevisionftc.github.io/HiveVisionDocs/hive.png',
+            content: '/HiveVisionDocs/hive.png',
           },
         },
       ],
