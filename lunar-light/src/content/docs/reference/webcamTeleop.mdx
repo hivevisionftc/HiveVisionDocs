@@ -1,6 +1,6 @@
 ---
 title: Webcam Teleop- Driving
-description: A simple test-friendly teleop for your Webcam presented by the Hive Vision team.
+description: A simple test-friendly teleop for your Webcam presented by Owen Cassidy from team 17113 - Hunga Munga
 ---
 import { Aside } from '@astrojs/starlight/components';
 import { Badge } from '@astrojs/starlight/components';
@@ -9,17 +9,16 @@ import { Code } from '@astrojs/starlight/components';
 import { Steps, FileTree } from '@astrojs/starlight/components';
 
 **How this code works**:
-This code acts as an ad-on to the `HiveVisionOpmode.java` that was created at the end of `Webcam` installation. It simply tracks the desired entities in your Webcam's FOV and will drive towards it. This OpMode is liikely not to use during a match but can be taken for inspiration on use cases for your team.
+This code acts as an ad-on to the `HiveVisionOpmode.java` that was created at the end of `Webcam` installation. It simply tracks the desired entities in your Webcam's FOV and will drive towards it. This OpMode is likely not to use during a match but can be taken for inspiration on use cases for your team.
+In order to leave manual mode, and force your robot to detect entities and move towards them, you must enable `Auto-Chase` as shown below.
 
-Controls (During the OpMode)
+During Teleop:<br></br>
+• Right Bumper (RB): Toggles Auto-Chase mode ON or OFF<br></br>
+<Aside type="tip">During Auto-Chase, your robot will spin and go to balls on its own, do not use your joystick during this state.</Aside><br></br>
+• Left Stick (Y-axis): Drives Forward / Backward.<br></br>
+• Left Stick (X-axis): Strafes Left / Right (Mecanum functionality).<br></br>
+• Right Stick (X-axis): Turns Left / Right in place.<br></br>
 
-• X Button: Switch target tracking color to BLUE.
-
-• B Button: Switch target tracking color to RED.
-
-• Y Button: Switch target tracking color to YELLOW.
-
-Once any of these buttons are clicked, putting that color of pollen/nectar will cause the robot to drive towards it.
 
 <Aside type="note">This code will ONLY work on a Webcam, please look at the usages menu for your camera. </Aside>
 
@@ -43,8 +42,9 @@ To confirm, your file structure should now look like this
 ## Adapt to your robot:
 Change the following code
 <Steps>
-    1. Change the webcam name so that it matches the name in your driver station, on line 34
-    2. Similarly, change your drivetrain motor names from lines 21-24 as shown in your driver station
+    1. Change the webcam name so that it matches the name in your driver station, on line 24
+    2. Similarly, change your drivetrain motor names from lines 57-60 as shown in your driver station
+    3. Change your intake name to the one shown in your driver station on line 61
 </Steps>
 
 You are all set! Please refer to the top of the page to learn how to operate the `HiveVisionOpmode`
