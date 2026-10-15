@@ -7,7 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build
 export default defineConfig({
     site: 'https://hivevisionftc.github.io',
-    base: '/HiveVisionDocs/', // Added trailing slash for correct path resolution
+    base: '/HiveVisionDocs/',
   integrations: [
     starlight({
         components: {
@@ -27,7 +27,6 @@ export default defineConfig({
               link: '/overview/aboutus',
             }
           ],
-          // Securely locks dark mode theme layer parameters inside the plugin engine
           disableDarkmodeToggle: true,
         }),
       ],
@@ -54,6 +53,28 @@ export default defineConfig({
           tag: 'meta',
           attrs: {
             name: 'twitter:image',
+            content: 'https://hivevisionftc.github.io/HiveVisionDocs/hive.png',
+          },
+        },
+        // --- DISCORD / OPEN GRAPH META TAGS ---
+        {
+          tag: 'meta',
+          attrs: {
+            property: 'og:title',
+            content: 'Hive Vision',
+          },
+        },
+        {
+          tag: 'meta',
+          attrs: {
+            property: 'og:description',
+            content: 'Documentation for Hive Vision FTC',
+          },
+        },
+        {
+          tag: 'meta',
+          attrs: {
+            property: 'og:image',
             content: 'https://hivevisionftc.github.io/HiveVisionDocs/hive.png',
           },
         },
