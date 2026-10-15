@@ -4,97 +4,164 @@ template: splash
 head:
   - tag: title
     content: Hive Vision
-hero:
-  tagline: Powerful vision library, at the tip of your finger
-
-  image:
-    file: /public/hive.png
-  actions:
-    - text: Read the docs
-      link: /HiveVisionDocs/overview/overview
-      icon: external
-      variant: secondary
-    - text: About Us
-      link: /HiveVisionDocs/overview/aboutus
-      icon: external
-      variant: minimal
-    - text: Join our discord
-      link: https://discord.com/invite/ga5WphW4QZ
-      icon: discord
-      variant: minimal
-
 ---
 
-import { Aside } from '@astrojs/starlight/components';
-import { Badge } from '@astrojs/starlight/components';
-import { CardGrid } from '@astrojs/starlight/components';
-import { Code } from '@astrojs/starlight/components';
-import { Steps, FileTree } from '@astrojs/starlight/components';
+import { Aside, Badge, CardGrid, Code, Steps, FileTree, LinkButton } from '@astrojs/starlight/components';
+
+export const exampleCode = `VisionPortal portal = new VisionPortal.Builder()
+    .setCamera(webcamName)
+    .setCameraResolution(new Size(1280, 720))
+    .addProcessor(baller)
+    .enableLiveView(true)
+    .build();`;
+
+export const fileName = 'HiveVisionOpmode.java';
+export const highlights = ['VisionPortal', 'addProcessor', 'enableLiveView'];
+
+{/* 50/50 Grid Container */}
+<div class="split-hero-container">
+
+  {/* LEFT COLUMN: All Text, Code, and Buttons grouped together */}
+  <div class="left-hero-column">
+    <p class="custom-tagline">An optimized, easy-to-use computer vision library tailored for FIRST Tech Challenge, at your camera choice.</p>
+
+    <div class="code-section-wrapper">
+      <Code code={exampleCode} lang="java" title={fileName} mark={highlights} />
+    </div>
+
+    <div class="action-buttons-wrapper">
+      <LinkButton href="/HiveVisionDocs/overview/overview" variant="secondary" icon="external">
+        Read the docs
+      </LinkButton>
+      <LinkButton href="/HiveVisionDocs/overview/aboutus" variant="minimal" icon="external">
+        About Us
+      </LinkButton>
+      <LinkButton href="https://discord.com" variant="minimal" icon="discord">
+        Join our discord
+      </LinkButton>
+    </div>
+  </div>
+
+  {/* RIGHT COLUMN: Just the logo */}
+  <div class="right-hero-column">
+    <img src="/public/hive.png" alt="Hive Vision Logo" class="large-hero-logo" />
+  </div>
+
+</div>
+
+---
 
 ## Neural Networking
 
 <CardGrid>
-  {/* Panel 1 */}
-  <div style={{
-    border: '1px solid var(--sl-color-hairline-light, #e2e8f0)',
-    borderRadius: '8px',
-    overflow: 'hidden',
-    backgroundColor: 'var(--sl-color-bg-nav, #ffffff)',
-    display: 'flex'
-  }}>
-    <video
-      autoPlay
-      loop
-      muted
-      playsInline
-      width="100%"
-      style={{ display: 'block', objectFit: 'cover' }}
-    >
+  <div style={{ border: '1px solid var(--sl-color-hairline-light, #e2e8f0)', borderRadius: '8px', overflow: 'hidden', backgroundColor: 'var(--sl-color-bg-nav, #ffffff)', display: 'flex' }}>
+    <video autoPlay loop muted playsInline width="100%" style={{ display: 'block', objectFit: 'cover' }} >
       <source src="/HiveVisionDocs/detection.mp4" type="video/mp4" />
       Your browser does not support the video tag.
     </video>
   </div>
 
-  {/* Panel 2 */}
-  <div style={{
-    border: '1px solid var(--sl-color-hairline-light, #e2e8f0)',
-    borderRadius: '8px',
-    overflow: 'hidden',
-    backgroundColor: 'var(--sl-color-bg-nav, #ffffff)',
-    display: 'flex'
-  }}>
-    <video
-      autoPlay
-      loop
-      muted
-      playsInline
-      width="100%"
-      style={{ display: 'block', objectFit: 'cover' }}
-    >
+  <div style={{ border: '1px solid var(--sl-color-hairline-light, #e2e8f0)', borderRadius: '8px', overflow: 'hidden', backgroundColor: 'var(--sl-color-bg-nav, #ffffff)', display: 'flex' }}>
+    <video autoPlay loop muted playsInline width="100%" style={{ display: 'block', objectFit: 'cover' }} >
       <source src="/HiveVisionDocs/arush.mp4" type="video/mp4" />
       Your browser does not support the video tag.
     </video>
   </div>
 </CardGrid>
 
-
-
-
-
-
-
-
-
-
-
-<style>`
-  .hero img {
-    max-width: 75% !important;
-    height: auto !important;
-    margin: 0 auto;
+<style is:global>{`
+  /* 1. Clear out default Starlight header/top padding on splash content */
+  .sl-markdown-content > :first-child {
+    margin-top: 0 !important;
   }
-  /* target starlight's primary button text color */
-  .sl-link-button.primary {
-    color: #000000 !important;
+
+  /* 2. Main 50/50 Columns Wrapper */
+  .split-hero-container {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr; /* Gives the code side slightly more width balance */
+    gap: 4rem;
+    align-items: center;
+    max-width: 1200px;
+    margin: 2rem auto 5rem auto;
   }
-`</style>
+
+  /* 3. Left Hand Sidebar Alignment styling */
+  .left-hero-column {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+
+  .custom-title {
+    font-size: var(--sl-text-h1) !important;
+    font-weight: 900;
+    line-height: 1.2;
+    color: var(--sl-color-white);
+    margin-bottom: 1rem !important;
+  }
+
+  .custom-tagline {
+    font-size: var(--sl-text-bg) !important;
+    color: var(--sl-color-gray-2);
+    line-height: 1.5;
+    margin-bottom: 2.5rem !important;
+  }
+
+  .code-section-wrapper h3 {
+    font-size: var(--sl-text-h3) !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .code-caption {
+    font-style: italic;
+    margin-top: 0.5rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  .action-buttons-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: flex-start;
+    margin-top: 2.5rem;
+  }
+
+  /* 4. Right Hand Standalone Image Styling */
+  .right-hero-column {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .large-hero-logo {
+    width: 100%;
+    max-width: 440px; /* Big right-hand graphic presentation */
+    height: auto;
+    filter: drop-shadow(0 0 25px rgba(0,0,0,0.3));
+  }
+
+  /* 5. Mobile responsive breakpoint stacking */
+  @media (max-width: 64rem) {
+    .split-hero-container {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .left-hero-column {
+      text-align: center;
+    }
+
+    .action-buttons-wrapper {
+      justify-content: center;
+    }
+
+    .right-hero-column {
+      order: -1; /* Puts the logo back on top for phone screens */
+    }
+
+    .large-hero-logo {
+      max-width: 260px;
+    }
+  }
+`}</style>
