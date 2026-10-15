@@ -47,6 +47,8 @@ import { Steps } from '@astrojs/starlight/components';
 6. On the `configuration` tab at the top **Upload the `tflite` and `labels`** into the designated spot in your pipeline settings.
    <img src="/HiveVisionDocs/tfliteLocation.png" alt="tflite" style={{ width: '65%', height: 'auto', display: 'block', marginTop: '1rem' }} />
 
+7. You may now point the Limeight at various etities and see detection the dashboard, if not try lowering the `Sensor Gain` and `Exposure` to ~20 and ~2200, and `confidence` lower according to your detection capabilities (0.3-0.4).
+
 </Steps>
 <Aside type="note">When operating this pipeline through our `Usages` or any code of your own, it is expected that you will need to change `confidence` of your tracking as variation in light, and obstacles can play a role.</Aside>
 
