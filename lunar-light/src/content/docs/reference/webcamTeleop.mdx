@@ -23,6 +23,17 @@ During Teleop:<br></br>
 <Aside type="note">This code will ONLY work on a Webcam, please look at the usages menu for your camera. </Aside>
 
 
+<video
+      autoPlay
+      loop
+      muted
+      playsInline
+      width="100%"
+      style={{ display: 'block', objectFit: 'cover' }}
+    >
+      <source src="/HiveVisionDocs/nemo.mov" type="video/mov" />
+      Your browser does not support the video tag.
+    </video>
 
 ## Quickstart:
 Since Webcam Installation has been completed, you should be left with a `HiveVisionOpmode.java` in your teamcode, replace that code with <a href="https://github.com/hivevisionftc/Hive-Vision/blob/main/demo/workingCode/HiveVisionOpmode.java
@@ -42,9 +53,8 @@ To confirm, your file structure should now look like this
 ## Adapt to your robot:
 Change the following code
 <Steps>
-    1. Change the webcam name so that it matches the name in your driver station, on line 24
-    2. Similarly, change your drivetrain motor names from lines 57-60 as shown in your driver station
-    3. Change your intake name to the one shown in your driver station on line 61
+    1. Change the webcam name so that it matches the name in your driver station, on line 23
+    2. Similarly, change your drivetrain motor names from lines 47-50 as shown in your driver station
 </Steps>
 
 You are all set! Please refer to the top of the page to learn how to operate the `HiveVisionOpmode`
