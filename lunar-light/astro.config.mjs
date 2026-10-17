@@ -31,7 +31,7 @@ export default defineConfig({
         }),
       ],
       title: 'Hive Vision',
-      favicon: '/hive.png',
+      favicon: '/hivebg.png',
 
       head: [
         {
