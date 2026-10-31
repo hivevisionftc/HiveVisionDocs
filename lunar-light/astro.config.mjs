@@ -6,8 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build
 export default defineConfig({
-    site: 'https://hivevisionftc.github.io',
-    base: '/HiveVisionDocs/',
+    site: 'https://hivevision.dev',
   integrations: [
     starlight({
         components: {
@@ -37,7 +36,7 @@ export default defineConfig({
         {
           tag: 'script',
           attrs: {
-            src: '/HiveVisionDocs/honeycomb.js',
+            src: '/honeycomb.js',
             type: 'module',
           },
         },
@@ -53,7 +52,7 @@ export default defineConfig({
           tag: 'meta',
           attrs: {
             name: 'twitter:image',
-            content: '/HiveVisionDocs/hive.png',
+            content: '/hive.png',
           },
         },
         // --- DISCORD / OPEN GRAPH META TAGS ---
@@ -75,7 +74,7 @@ export default defineConfig({
           tag: 'meta',
           attrs: {
             property: 'og:image',
-            content: '/HiveVisionDocs/hive.png',
+            content: '/hive.png',
           },
         },
       ],

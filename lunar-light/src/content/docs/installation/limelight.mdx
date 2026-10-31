@@ -32,11 +32,11 @@ import { Steps } from '@astrojs/starlight/components';
 
 3. **Allow pipeline switch at the top**
     Select a pipeline that you can remember.
-     <img src="/HiveVisionDocs/pipelineSwitchingAllow.png" alt="tflite" style={{ width: '65%', height: 'auto', display: 'block', marginTop: '1rem' }} />
+     <img src="/pipelineSwitchingAllow.png" alt="tflite" style={{ width: '65%', height: 'auto', display: 'block', marginTop: '1rem' }} />
 
 
 4. **Select `Neural Detector`** for your pipeline type on the Limelight local   This will allow the Hive Vision program to be running on your limelight's cpu.
-      <img src="/HiveVisionDocs/neuralDetector.png" alt="tflite" style={{ width: '65%', height: 'auto', display: 'block', marginTop: '1rem' }} />
+      <img src="/neuralDetector.png" alt="tflite" style={{ width: '65%', height: 'auto', display: 'block', marginTop: '1rem' }} />
 
 
 5. **Download the [`tflite`](https://github.com/hivevisionftc/Hive-Vision/blob/main/releases/v2.0.0/best_limelight3a_ssd_mobilenetv2_300x300_v2_int8_dets25.tflite) and [`labels`](https://github.com/hivevisionftc/Hive-Vision/blob/main/releases/v2.0.0/labels.txt).**
@@ -45,7 +45,7 @@ import { Steps } from '@astrojs/starlight/components';
 
 
 6. On the `configuration` tab at the top **Upload the `tflite` and `labels`** into the designated spot in your pipeline settings.
-   <img src="/HiveVisionDocs/tfliteLocation.png" alt="tflite" style={{ width: '65%', height: 'auto', display: 'block', marginTop: '1rem' }} />
+   <img src="/tfliteLocation.png" alt="tflite" style={{ width: '65%', height: 'auto', display: 'block', marginTop: '1rem' }} />
 
 7. You may now point the Limeight at various etities and see detection the dashboard, if not try lowering the `Sensor Gain` and `Exposure` to ~20 and ~2200, and `confidence` lower according to your detection capabilities (0.3-0.4).
 
