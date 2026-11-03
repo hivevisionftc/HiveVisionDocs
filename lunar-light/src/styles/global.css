@@ -165,6 +165,38 @@ button[aria-label*="theme"],
 .sl-link-button.primary:hover {
   color: #ffffff !important;
 }
+/*
+   --- HOME PAGE (splash) INTEGRATION ---
+   starlight-theme-black sets `.sl-markdown-content * { font-size: 15px }`,
+   which flattens every span in the landing page (the quote's word spans and
+   the big feature headlines). Restore inheritance inside the page only.
+*/
+.hv span,
+.hv strong,
+.hv em,
+.hv b,
+.hv i,
+.hv small,
+.hv sub,
+.hv sup {
+  font-size: inherit;
+}
+
+/* The landing page ships its own hero, so Starlight's page title/description
+   header (and its "Copy page" actions) are duplicates there. */
+body:has(.hv) .page-title {
+  display: none;
+}
+
+/* Give the landing page its intended 1160px stage instead of the 1080px docs column. */
+body:has(.hv) {
+  --sl-content-width: 72.5rem;
+}
+
+body:has(.hv) .content-panel:first-of-type {
+  padding-block-start: 0;
+}
+
 :root {
   color-scheme: dark;
 }
