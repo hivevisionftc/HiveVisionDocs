@@ -1,155 +1,167 @@
 ---
-title: Hive Vision
-description: Pollen and nectar detection for FTC robots. AprilTags are next.
+title: Welcome to Hive Vision
 template: splash
 head:
   - tag: title
     content: Hive Vision
 ---
 
-<div class="hv">
+import { Aside, Badge, CardGrid, Code, Steps, FileTree, LinkButton } from '@astrojs/starlight/components';
 
-<section class="hv-top">
-  <h1>Vision for FTC robots.</h1>
-  <p class="hv-sub"><span>Pollen and nectar detection, on the robot.</span><span>AprilTags are next.</span></p>
-  <div class="hv-hero-img hv-grow"><img src="/media/detect.jpg" srcset="/media/detect.jpg 1600w, /media/detect@2x.jpg 3200w" sizes="(max-width: 60rem) 92vw, 1160px" width="1600" height="900" decoding="async" alt="Hive Vision detections: yellow pollen, blue nectar and red nectar, each boxed and labeled with a confidence score" /></div>
-</section>
+export const exampleCode = `VisionPortal portal = new VisionPortal.Builder()
+    .setCamera(webcamName)
+    .setCameraResolution(new Size(1280, 720))
+    .addProcessor(baller)
+    .enableLiveView(true)
+    .build();`;
 
-<section class="hv-sight" id="sight" aria-label="Why Hive Vision exists">
-  <div class="hv-vf"><p class="hv-sight-text hv-lit">“<span class="w">Sight—an</span> <span class="w">ability</span> <span class="w">so</span> <span class="w">inherent</span> <span class="w">that</span> <span class="w">we</span> <span class="w">rarely</span> <span class="w">consider</span> <span class="w">what</span> <span class="w">it</span> <span class="w">means</span> <span class="w">to</span> <span class="w">be</span> <span class="w">without</span> <span class="w">it.</span>”</p></div>
-</section>
+export const fileName = 'HiveVisionOpmode.java';
+export const highlights = ['VisionPortal', 'addProcessor', 'enableLiveView'];
 
-<section id="tracks" class="hv-feat">
-  <h3 class="hv-ft">Limelight 3A</h3>
-  <p class="hv-lit hv-big"><span class="w">Neural</span> <span class="w">detection.</span> <span class="w">Trained</span> <span class="w">on</span> <span class="w">about</span> <span class="w">14,000</span> <span class="w">labeled</span> <span class="w">images.</span> <span class="w">Runs</span> <span class="w">on</span> <span class="w">the</span> <span class="w">Limelight.</span></p>
-  <div class="hv-media hv-grow "><video autoPlay loop muted playsInline preload="metadata" aria-label="Limelight 3A detecting pollen and nectar"><source src="/media/limelight.mp4" type="video/mp4" /></video></div>
-  <a class="hv-btn" href="/installation/limelight">Install guide</a>
-</section>
+{/* 50/50 Grid Container */}
+<div class="split-hero-container">
 
-<section class="hv-feat">
-  <h3 class="hv-ft">Control Hub</h3>
-  <p class="hv-lit hv-big"><span class="w">OpenCV.</span> <span class="w">No</span> <span class="w">model</span> <span class="w">and</span> <span class="w">no</span> <span class="w">extra</span> <span class="w">hardware.</span> <span class="w">Runs</span> <span class="w">on</span> <span class="w">the</span> <span class="w">Control</span> <span class="w">Hub.</span></p>
-  <div class="hv-media hv-grow "><video autoPlay loop muted playsInline preload="metadata" aria-label="Control Hub robot driving to detected game pieces"><source src="/media/controlhub.mp4" type="video/mp4" /></video></div>
-  <a class="hv-btn" href="/installation/webcam">Install guide</a>
-</section>
+  {/* LEFT COLUMN: All Text, Code, and Buttons grouped together */}
+  <div class="left-hero-column">
+    <p class="custom-tagline">An optimized, easy-to-use computer vision library tailored for FIRST Tech Challenge, at your camera choice.</p>
 
-<section class="hv-feat">
-  <h3 class="hv-ft">On the field</h3>
-  <p class="hv-lit hv-big"><span class="w">A</span> <span class="w">robot</span> <span class="w">on</span> <span class="w">a</span> <span class="w">practice</span> <span class="w">field,</span> <span class="w">driving</span> <span class="w">to</span> <span class="w">what</span> <span class="w">it</span> <span class="w">sees.</span></p>
-  <div class="hv-media hv-grow hv-narrow"><video autoPlay loop muted playsInline preload="metadata" aria-label="Robot driving toward a ball on a practice field"><source src="/media/field.mp4" type="video/mp4" /></video></div>
-</section>
+    <div class="code-section-wrapper">
+      <Code code={exampleCode} lang="java" title={fileName} mark={highlights} />
+    </div>
 
-<section class="hv-april">
-  <p class="hv-lit hv-huge"><span class="w">AprilTag</span> <span class="w">detection</span> <span class="w">is</span> <span class="w">on</span> <span class="w">the</span> <span class="w">way.</span></p>
-  <p class="hv-note2">Watch the repository for updates.</p>
-</section>
-
-<section id="examples" class="hv-row">
-  <div>
-    <h2>Examples</h2>
-    <p style={{marginTop:'1rem'}}>Working OpModes to start from.</p>
+    <div class="action-buttons-wrapper">
+      <LinkButton href="/HiveVisionDocs/overview/overview" variant="secondary" icon="external">
+        Read the docs
+      </LinkButton>
+      <LinkButton href="/HiveVisionDocs/overview/aboutus" variant="minimal" icon="external">
+        About Us
+      </LinkButton>
+      <LinkButton href="https://discord.gg/D42uBwKPwb" variant="minimal" icon="discord">
+        Join our discord
+      </LinkButton>
+    </div>
   </div>
-  <div>
-    <div class="hv-ex"><div><strong>Limelight 3A</strong><code>teleopLimelight.java</code></div><a class="hv-btn" href="/reference/teleop">View docs</a></div>
-    <div class="hv-ex"><div><strong>Control Hub</strong><code>HiveVisionOpmode.java</code></div><a class="hv-btn" href="/reference/webcamteleop">View docs</a></div>
-  </div>
-</section>
 
-<section class="hv-end">
-  <div><h2>Built to win.</h2></div>
-  <div><h4>Project</h4><ul><li><a href="/overview/overview">Documentation</a></li><li><a href="https://github.com/hivevisionftc/Hive-Vision" target="_blank" rel="noopener">GitHub</a></li><li><a href="https://discord.gg/ga5WphW4QZ" target="_blank" rel="noopener">Discord</a></li></ul></div>
-  <div><h4>Page</h4><ul><li><a href="#tracks">Tracks</a></li><li><a href="#examples">Examples</a></li></ul></div>
-  <div><h4>Follow</h4><div class="hv-socs"><a class="hv-soc" href="https://www.instagram.com/hivevisionftc/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.03.084c-1.277.06-2.149.264-2.91.563a5.9 5.9 0 0 0-2.124 1.388 5.9 5.9 0 0 0-1.38 2.127C.321 4.926.12 5.8.064 7.076s-.069 1.688-.063 4.947.021 3.667.083 4.947c.061 1.277.264 2.149.563 2.911.308.789.72 1.457 1.388 2.123a5.9 5.9 0 0 0 2.129 1.38c.763.295 1.636.496 2.913.552 1.278.056 1.689.069 4.947.063s3.668-.021 4.947-.082c1.28-.06 2.147-.265 2.91-.563a5.9 5.9 0 0 0 2.123-1.388 5.9 5.9 0 0 0 1.38-2.129c.295-.763.496-1.636.551-2.912.056-1.28.07-1.69.063-4.948-.006-3.258-.02-3.667-.081-4.947-.06-1.28-.264-2.148-.564-2.911a5.9 5.9 0 0 0-1.387-2.123 5.86 5.86 0 0 0-2.128-1.38C19.074.322 18.202.12 16.924.066 15.647.009 15.236-.006 11.977 0S8.31.021 7.03.084m.14 21.693c-1.17-.05-1.805-.245-2.228-.408a3.7 3.7 0 0 1-1.382-.895 3.7 3.7 0 0 1-.9-1.378c-.165-.423-.363-1.058-.417-2.228-.06-1.264-.072-1.644-.08-4.848-.006-3.204.006-3.583.061-4.848.05-1.169.246-1.805.408-2.228.216-.561.477-.96.895-1.382a3.7 3.7 0 0 1 1.379-.9c.423-.165 1.057-.361 2.227-.417 1.265-.06 1.644-.072 4.848-.08 3.203-.006 3.583.006 4.85.062 1.168.05 1.804.244 2.227.408.56.216.96.475 1.382.895s.681.817.9 1.378c.165.422.362 1.056.417 2.227.06 1.265.074 1.645.08 4.848.005 3.203-.006 3.583-.061 4.848-.051 1.17-.245 1.805-.408 2.23-.216.56-.477.96-.896 1.38a3.7 3.7 0 0 1-1.378.9c-.422.165-1.058.362-2.226.418-1.266.06-1.645.072-4.85.079s-3.582-.006-4.848-.06m9.783-16.192a1.44 1.44 0 1 0 1.437-1.442 1.44 1.44 0 0 0-1.437 1.442M5.839 12.012a6.161 6.161 0 1 0 12.323-.024 6.162 6.162 0 0 0-12.323.024M8 12.008A4 4 0 1 1 12.008 16 4 4 0 0 1 8 12.008"/></svg></a><a class="hv-soc" href="https://www.youtube.com/@HiveVisionFTC/shorts" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.02 3.02 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.02 3.02 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.02 3.02 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.02 3.02 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814M9.545 15.568V8.432L15.818 12z"/></svg></a><a class="hv-soc" href="https://www.tiktok.com/@hivevisionftc" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07"/></svg></a><a class="hv-soc" href="https://x.com/hivevisionftc" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg></a><a class="hv-soc" href="https://github.com/hivevisionftc/Hive-Vision" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a><a class="hv-soc" href="https://discord.gg/ga5WphW4QZ" target="_blank" rel="noopener" aria-label="Discord"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.37a19.8 19.8 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.3 18.3 0 0 0-5.487 0 13 13 0 0 0-.617-1.25.08.08 0 0 0-.079-.037A19.7 19.7 0 0 0 3.677 4.37a.1.1 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.08.08 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.08.08 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13 13 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10 10 0 0 0 .372-.292.07.07 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.07.07 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.08.08 0 0 0 .084.028 19.8 19.8 0 0 0 6.002-3.03.08.08 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.06.06 0 0 0-.031-.03M8.02 15.33c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418m7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418"/></svg></a></div></div>
-</section>
+  {/* RIGHT COLUMN: Just the logo */}
+  <div class="right-hero-column">
+    <img src="/HiveVisionDocs/hive.png" alt="Hive Vision Logo" class="large-hero-logo" />
+  </div>
 
 </div>
 
-<style is:global>{`@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,500;0,700;1,500&display=swap');
+---
 
-.hv{max-width:1080px;margin:0 auto;color:#d9d9de}
-.hv h1,.hv h2,.hv h3,.hv p{margin:0}.hv a{text-decoration:none}
-.hv-btn{display:inline-block;padding:.65rem 1.3rem;font-weight:700;font-size:.9rem;color:#fff;border:1px solid rgba(255,255,255,.6)}
-.hv-btn.solid{background:#fff;color:#000;border-color:#fff;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))}
-.hv-btn:hover{background:#fff;color:#000}
-.hv-top{text-align:center;padding:3rem 0 1rem}
-.hv-top h1{font-size:clamp(2.7rem,7vw,4.9rem);font-weight:800;line-height:1.03;letter-spacing:-.02em;color:#fff;margin-bottom:1rem}
-.hv-sub{color:#a9a9b2;font-size:1.15rem;margin-bottom:2rem}
-.hv-btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.75rem}
-.hv-frame{border:1px solid rgba(255,255,255,.3);padding:8px;background:rgba(0,0,0,.5)}
-.hv-frame video{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#000}
-.hv-top .hv-frame{max-width:700px;margin:0 auto;box-shadow:0 0 80px rgba(255,255,255,.06)}
-.hv-q{margin:2.5rem auto 0;max-width:46ch;font-style:italic;color:#8a8a94}
-.hv-sec{padding:4.5rem 0 0}
-.hv-sec h2{font-size:clamp(1.8rem,3vw,2.2rem);font-weight:800;color:#fff;margin-bottom:1.5rem}
-.hv-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
-.hv-card{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.02);display:flex;flex-direction:column}
-.hv-card video{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#000}
-.hv-card div{padding:1rem 1.1rem 1.2rem}
-.hv-card h3{color:#fff;font-size:1.15rem;font-weight:800;margin-bottom:.4rem}
-.hv-card p{color:#a9a9b2;font-size:.9rem;line-height:1.55}
-.hv-card a{display:inline-block;margin-top:.8rem;color:#fff;font-size:.85rem;font-weight:700;text-decoration:underline!important;text-underline-offset:4px}
-.hv-row{display:grid;grid-template-columns:1fr 1.1fr;gap:3rem;padding:4.5rem 0;border-top:1px solid rgba(255,255,255,.14);margin-top:4.5rem}
-.hv-row h2{font-size:clamp(1.9rem,3.4vw,2.6rem);font-weight:800;line-height:1.1;color:#fff;max-width:12ch}
-.hv-row p{color:#a9a9b2;font-size:.95rem}.hv-row .hv-note{align-self:end}
-.hv-row+.hv-row{margin-top:0}
-.hv-ex{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.1rem 0;border-top:1px solid rgba(255,255,255,.4)}
-.hv-ex:last-child{border-bottom:1px solid rgba(255,255,255,.14)}
-.hv-ex strong{display:block;color:#fff}
-.hv-ex code{font-size:.75rem;color:#a9a9b2;background:rgba(255,255,255,.06);padding:.1rem .4rem}
-.hv-ex .hv-btn{padding:.4rem .9rem;font-size:.8rem;white-space:nowrap}
-.hv-end{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:2rem;border-top:1px solid rgba(255,255,255,.4);padding:4rem 0 3rem}
-.hv-end h2{font-size:2.2rem;font-weight:800;color:#fff}
-.hv-end h4{margin:0 0 .8rem;color:#fff;font-size:.85rem}
-.hv-end ul{list-style:none;margin:0;padding:0;display:grid;gap:.5rem}.hv-end li{margin:0}
-.hv-end li a{color:#a9a9b2;font-size:.85rem}.hv-end li a:hover{color:#fff}
-.hv-socs{display:flex;flex-wrap:nowrap;gap:.4rem}
-.hv-soc{display:grid;place-items:center;flex:0 1 2rem;min-width:0;aspect-ratio:1;border:1px solid rgba(255,255,255,.4);color:#fff}
-.hv-soc svg{width:60%;height:60%}.hv-soc:hover{background:#fff;color:#000}
-@media(max-width:60rem){.hv-cards,.hv-row{grid-template-columns:1fr}.hv-row{gap:2rem}.hv-end{grid-template-columns:1fr 1fr}.hv .hv-end>div:last-child{grid-column:1/-1}}
+## Neural Networking
 
-.hv,.hv a,.hv code{font-family:'Chakra Petch',system-ui,sans-serif}
-.hv code{font-family:ui-monospace,Menlo,monospace}
-.hv h1,.hv h2{text-transform:uppercase;letter-spacing:.02em;font-weight:700}
-.hv .hv-top h1{font-size:clamp(2.6rem,6.5vw,4.7rem);line-height:.98;margin-bottom:1.75rem;text-shadow:0 0 40px rgba(255,255,255,.18)}
-.hv .hv-sub{font-size:1.2rem;letter-spacing:.03em;color:#b4b4bd;margin:0 auto 2.75rem;max-width:34ch}
-.hv .hv-btn{letter-spacing:.06em;text-transform:uppercase;font-weight:700;font-size:.85rem}
-.hv .hv-q{margin:3rem auto 0;max-width:36ch;text-align:center;font-style:italic;font-weight:500;font-size:1.15rem;line-height:1.5;color:#c9c9d0}
-.hv .hv-card h3,.hv .hv-end h4{text-transform:uppercase;letter-spacing:.05em}
+<CardGrid>
+  <div style={{ border: '1px solid var(--sl-color-hairline-light, #e2e8f0)', borderRadius: '8px', overflow: 'hidden', backgroundColor: 'var(--sl-color-bg-nav, #ffffff)', display: 'flex' }}>
+    <video autoPlay loop muted playsInline width="100%" style={{ display: 'block', objectFit: 'cover' }} >
+      <source src="/HiveVisionDocs/detection.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </div>
 
-.hv .hv-sight{margin:5.5rem 0 0;padding:0}
-.hv .hv-vf{padding:4.5rem 3.5rem;background:
-linear-gradient(#fff,#fff) top left/34px 2px no-repeat,linear-gradient(#fff,#fff) top left/2px 34px no-repeat,
-linear-gradient(#fff,#fff) top right/34px 2px no-repeat,linear-gradient(#fff,#fff) top right/2px 34px no-repeat,
-linear-gradient(#fff,#fff) bottom left/34px 2px no-repeat,linear-gradient(#fff,#fff) bottom left/2px 34px no-repeat,
-linear-gradient(#fff,#fff) bottom right/34px 2px no-repeat,linear-gradient(#fff,#fff) bottom right/2px 34px no-repeat}
-.hv .hv-sight-text{font-size:clamp(1.9rem,5.2vw,4rem);font-weight:700;line-height:1.08;letter-spacing:.01em;text-transform:uppercase;color:#fff;text-align:left}
-.hv .hv-sight.js .w{color:#2e2e36;transition:color .3s ease,text-shadow .3s ease}
-.hv .hv-sight.js .w.on{color:#fff;text-shadow:0 0 28px rgba(255,255,255,.3)}
-@media(max-width:60rem){.hv .hv-vf{padding:2.5rem 1.5rem}}
+  <div style={{ border: '1px solid var(--sl-color-hairline-light, #e2e8f0)', borderRadius: '8px', overflow: 'hidden', backgroundColor: 'var(--sl-color-bg-nav, #ffffff)', display: 'flex' }}>
+    <video autoPlay loop muted playsInline width="100%" style={{ display: 'block', objectFit: 'cover' }} >
+      <source src="/HiveVisionDocs/arush.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </div>
+</CardGrid>
 
-.hv{max-width:1160px}
-.hv .hv-top{padding:4rem 0 2rem;text-align:center}
-.hv .hv-top h1{font-size:clamp(2.8rem,9.5vw,7.6rem);line-height:.95;margin-bottom:2.25rem}
-.hv .hv-sub{display:grid;gap:.5rem;margin:0 auto 4.5rem;max-width:none}
-.hv .hv-sub span{font-size:clamp(1.15rem,2.4vw,1.7rem);letter-spacing:.03em;color:#e8e8ee}
-.hv .hv-sub span+span{color:#7c7c86}
-.hv .hv-hero-img{border-radius:20px;overflow:hidden;box-shadow:0 0 120px rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14)}
-.hv .hv-hero-img img{display:block;width:100%;height:auto;margin:0}
-.hv .hv-grow{transform:scale(calc(.86 + .14 * var(--g,1)));opacity:calc(.3 + .7 * var(--g,1));transform-origin:50% 0;will-change:transform}
-.hv.js .hv-lit .w{color:#34343d;transition:color .3s ease,text-shadow .3s ease}
-.hv.js .hv-lit .w.on{color:#fff;text-shadow:0 0 28px rgba(255,255,255,.28)}
-.hv .hv-feat{padding:9rem 0 0;text-align:left}
-.hv .hv-ft{font-size:1rem;letter-spacing:.18em;text-transform:uppercase;color:#8a8a94;margin-bottom:1.25rem}
-.hv .hv-big{font-size:clamp(1.9rem,4.6vw,3.6rem);font-weight:700;line-height:1.08;text-transform:uppercase;color:#fff;max-width:20ch;margin-bottom:3.25rem}
-.hv .hv-media{border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.14);box-shadow:0 0 100px rgba(255,255,255,.06);margin-bottom:2rem;background:#000}
-.hv .hv-media video{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
-.hv .hv-narrow{max-width:760px;margin-left:auto;margin-right:auto}
-.hv .hv-narrow video{aspect-ratio:4/3}
-.hv .hv-april{padding:11rem 0 5rem;text-align:center}
-.hv .hv-huge{font-size:clamp(2.4rem,7.5vw,6rem);font-weight:700;line-height:1;text-transform:uppercase;color:#fff;max-width:14ch;margin:0 auto 2rem}
-.hv .hv-note2{color:#8a8a94;font-size:1.05rem;letter-spacing:.04em}
-.hv .hv-row{margin-top:0}
-@media(max-width:60rem){.hv .hv-feat{padding-top:6rem}.hv .hv-april{padding-top:7rem}.hv .hv-hero-img,.hv .hv-media{border-radius:14px}}
+<style is:global>{`
+  /* 1. Clear out default Starlight header/top padding on splash content */
+  .sl-markdown-content > :first-child {
+    margin-top: 0 !important;
+  }
+
+  /* 2. Main 50/50 Columns Wrapper */
+  .split-hero-container {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr; /* Gives the code side slightly more width balance */
+    gap: 4rem;
+    align-items: center;
+    max-width: 1200px;
+    margin: 2rem auto 5rem auto;
+  }
+
+  /* 3. Left Hand Sidebar Alignment styling */
+  .left-hero-column {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+
+  .custom-title {
+    font-size: var(--sl-text-h1) !important;
+    font-weight: 900;
+    line-height: 1.2;
+    color: var(--sl-color-white);
+    margin-bottom: 1rem !important;
+  }
+
+  .custom-tagline {
+    font-size: var(--sl-text-bg) !important;
+    color: var(--sl-color-gray-2);
+    line-height: 1.5;
+    margin-bottom: 2.5rem !important;
+  }
+
+  .code-section-wrapper h3 {
+    font-size: var(--sl-text-h3) !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .code-caption {
+    font-style: italic;
+    margin-top: 0.5rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  .action-buttons-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: flex-start;
+    margin-top: 2.5rem;
+  }
+
+  /* 4. Right Hand Standalone Image Styling */
+  .right-hero-column {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .large-hero-logo {
+    width: 100%;
+    max-width: 440px; /* Big right-hand graphic presentation */
+    height: auto;
+    filter: drop-shadow(0 0 25px rgba(0,0,0,0.3));
+  }
+
+  /* 5. Mobile responsive breakpoint stacking */
+  @media (max-width: 64rem) {
+    .split-hero-container {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .left-hero-column {
+      text-align: center;
+    }
+
+    .action-buttons-wrapper {
+      justify-content: center;
+    }
+
+    .right-hero-column {
+      order: -1; /* Puts the logo back on top for phone screens */
+    }
+
+    .large-hero-logo {
+      max-width: 260px;
+    }
+  }
 `}</style>
-
-<script is:inline>{`(function(){var root=document.querySelector('.hv');if(!root)return;var rm=window.matchMedia('(prefers-reduced-motion: reduce)').matches;var lits=[].slice.call(root.querySelectorAll('.hv-lit')).map(function(e){return{e:e,w:e.querySelectorAll('.w')}});var grows=[].slice.call(root.querySelectorAll('.hv-grow'));if(!rm)root.classList.add('js');function f(){if(rm)return;var vh=window.innerHeight;lits.forEach(function(o){var r=o.e.getBoundingClientRect();var p=(vh*0.88-r.top)/(vh*0.38+r.height);p=Math.max(0,Math.min(1,p));var n=Math.ceil(p*o.w.length);for(var i=0;i<o.w.length;i++){o.w[i].classList.toggle('on',i<n)}});grows.forEach(function(e){var r=e.getBoundingClientRect();var g=(vh-r.top)/(vh*0.75);g=Math.max(0,Math.min(1,g));e.style.setProperty('--g',g.toFixed(3))})}window.addEventListener('scroll',f,{passive:true});window.addEventListener('resize',f);f();if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){var p=x.target.play();if(p&&p.catch)p.catch(function(){})}else{x.target.pause()}})},{threshold:0.15});[].forEach.call(root.querySelectorAll('video'),function(v){io.observe(v)})}})();`}</script>
