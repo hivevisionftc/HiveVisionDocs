@@ -18,22 +18,35 @@ export const exampleCode = `VisionPortal portal = new VisionPortal.Builder()
 export const fileName = 'HiveVisionOpmode.java';
 export const highlights = ['VisionPortal', 'addProcessor', 'enableLiveView'];
 
-{/* 50/50 Grid Container */}
+{/* 50/50 Grid Hero Container */}
 <div class="split-hero-container">
 
-  {/* LEFT COLUMN: All Text, Code, and Buttons grouped together */}
+  {/* LEFT COLUMN: Hero content, status pills, text, glowing code block, and buttons */}
   <div class="left-hero-column">
-    <p class="custom-tagline">An optimized, easy-to-use computer vision library tailored for FIRST Tech Challenge, at your camera choice.</p>
+
+    <div class="hero-badge-row">
+      <span class="glow-pill">
+        <span class="pulse-dot"></span>
+        FTC Vision Ecosystem
+      </span>
+      <span class="glow-pill-alt">Limelight 3A & Webcam Ready</span>
+    </div>
+
+    <h1 class="gradient-hero-title">Hive Vision</h1>
+
+    <p class="custom-tagline">
+      An optimized, easy-to-use computer vision library tailored for FIRST Tech Challenge, built for your camera choice with co-processor AI & real-time color tracking.
+    </p>
 
     <div class="code-section-wrapper">
       <Code code={exampleCode} lang="java" title={fileName} mark={highlights} />
     </div>
 
     <div class="action-buttons-wrapper">
-      <LinkButton href="/overview/overview" variant="secondary" icon="external">
+      <LinkButton href="/overview/overview" variant="minimal" icon="external">
         Read the docs
       </LinkButton>
-      <LinkButton href="/overview/aboutus" variant="minimal" icon="external">
+      <LinkButton href="/overview/aboutus" variant="secondary" icon="external">
         About Us
       </LinkButton>
       <LinkButton href="https://discord.gg/D42uBwKPwb" variant="minimal" icon="discord">
@@ -42,27 +55,60 @@ export const highlights = ['VisionPortal', 'addProcessor', 'enableLiveView'];
     </div>
   </div>
 
-  {/* RIGHT COLUMN: Just the logo */}
+  {/* RIGHT COLUMN: Floating glowing logo */}
   <div class="right-hero-column">
-    <img src="/hive.png" alt="Hive Vision Logo" class="large-hero-logo" />
+    <div class="logo-glow-wrapper">
+      <img src="/hive.png" alt="Hive Vision Logo" class="large-hero-logo" />
+    </div>
   </div>
 
 </div>
 
+{/* FEATURE HIGHLIGHTS BAR */}
+<div class="feature-highlights-grid">
+  <div class="feature-stat-card">
+    <div class="stat-number">100% Offloaded</div>
+    <div class="stat-label">Zero Control Hub CPU overhead via Limelight 3A coprocessor neural net.</div>
+  </div>
+  <div class="feature-stat-card">
+    <div class="stat-number">Sub-30ms</div>
+    <div class="stat-label">Real-time object bounding boxes for yellow pollen, red nectar, & blue nectar.</div>
+  </div>
+  <div class="feature-stat-card">
+    <div class="stat-number">PedroPathing</div>
+    <div class="stat-label">Instant Bezier trajectory splines automatically driven from field target poses.</div>
+  </div>
+  <div class="feature-stat-card">
+    <div class="stat-number">OpenCV & TFLite</div>
+    <div class="stat-label">Flexible backends supporting SSD MobileNet V2 and Control Hub HSV color thresholding.</div>
+  </div>
+</div>
+
 ---
 
-## Neural Networking
+<div class="section-header-wrapper">
+  <h2 class="glowing-section-title">Neural Networking & Live Detection</h2>
+  <p class="section-subtitle">Real-time inference feeds, target tracking, and autonomous field pathing in action.</p>
+</div>
 
 <CardGrid>
-  <div style={{ border: '1px solid var(--sl-color-hairline-light, #e2e8f0)', borderRadius: '8px', overflow: 'hidden', backgroundColor: 'var(--sl-color-bg-nav, #ffffff)', display: 'flex' }}>
-    <video autoPlay loop muted playsInline width="100%" style={{ display: 'block', objectFit: 'cover' }} >
+  <div class="video-card-container">
+    <div class="video-header-badge">
+      <span>⚡ Neural Network Detection</span>
+      <Badge text="Limelight 3A SSD MobileNet V2" variant="note" />
+    </div>
+    <video autoPlay loop muted playsInline width="100%" style={{ display: 'block', objectFit: 'cover' }}>
       <source src="/detection.mp4" type="video/mp4" />
       Your browser does not support the video tag.
     </video>
   </div>
 
-  <div style={{ border: '1px solid var(--sl-color-hairline-light, #e2e8f0)', borderRadius: '8px', overflow: 'hidden', backgroundColor: 'var(--sl-color-bg-nav, #ffffff)', display: 'flex' }}>
-    <video autoPlay loop muted playsInline width="100%" style={{ display: 'block', objectFit: 'cover' }} >
+  <div class="video-card-container">
+    <div class="video-header-badge">
+      <span>🎯 Live Field Pathing & Splines</span>
+      <Badge text="PedroPathing Integration" variant="success" />
+    </div>
+    <video autoPlay loop muted playsInline width="100%" style={{ display: 'block', objectFit: 'cover' }}>
       <source src="/arush.mp4" type="video/mp4" />
       Your browser does not support the video tag.
     </video>
@@ -75,47 +121,110 @@ export const highlights = ['VisionPortal', 'addProcessor', 'enableLiveView'];
     margin-top: 0 !important;
   }
 
-  /* 2. Main 50/50 Columns Wrapper */
+  /* 2. Keyframe Animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-12px) rotate(1.5deg); }
+  }
+
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(1.4); }
+  }
+
+  /* 3. Hero Status Pills */
+  .hero-badge-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .glow-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.85rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fbbf24;
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    border-radius: 9999px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+  }
+
+  .pulse-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #f59e0b;
+    border-radius: 50%;
+    animation: pulseDot 2s infinite ease-in-out;
+    box-shadow: 0 0 8px #f59e0b;
+  }
+
+  .glow-pill-alt {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.85rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #cbd5e1;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 9999px;
+  }
+
+  .gradient-hero-title {
+    font-size: clamp(2.8rem, 5.5vw, 4.2rem) !important;
+    font-weight: 900 !important;
+    line-height: 1.1 !important;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #ffffff 0%, #fef3c7 35%, #f59e0b 70%, #d97706 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem !important;
+    filter: drop-shadow(0 0 30px rgba(245, 158, 11, 0.3));
+  }
+
+  /* 4. Main 50/50 Columns Wrapper */
   .split-hero-container {
     display: grid;
-    grid-template-columns: 1.1fr 0.9fr; /* Gives the code side slightly more width balance */
+    grid-template-columns: 1.15fr 0.85fr;
     gap: 4rem;
     align-items: center;
     max-width: 1200px;
-    margin: 2rem auto 5rem auto;
+    margin: 1.5rem auto 4rem auto;
   }
 
-  /* 3. Left Hand Sidebar Alignment styling */
+  /* 5. Left Column Alignment */
   .left-hero-column {
     display: flex;
     flex-direction: column;
     text-align: left;
   }
 
-  .custom-title {
-    font-size: var(--sl-text-h1) !important;
-    font-weight: 900;
-    line-height: 1.2;
-    color: var(--sl-color-white);
-    margin-bottom: 1rem !important;
-  }
-
   .custom-tagline {
     font-size: var(--sl-text-bg) !important;
-    color: var(--sl-color-gray-2);
-    line-height: 1.5;
-    margin-bottom: 2.5rem !important;
+    color: #cbd5e1;
+    line-height: 1.6;
+    margin-bottom: 2rem !important;
   }
 
-  .code-section-wrapper h3 {
-    font-size: var(--sl-text-h3) !important;
-    margin-bottom: 0.75rem !important;
+  .code-section-wrapper {
+    position: relative;
+    border-radius: 12px;
+    padding: 2px;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.4) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(245, 158, 11, 0.25) 100%);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(245, 158, 11, 0.18);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
   }
 
-  .code-caption {
-    font-style: italic;
-    margin-top: 0.5rem;
-    color: var(--sl-color-gray-3);
+  .code-section-wrapper:hover {
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7), 0 0 35px rgba(245, 158, 11, 0.35);
+    transform: translateY(-2px);
   }
 
   .action-buttons-wrapper {
@@ -123,24 +232,140 @@ export const highlights = ['VisionPortal', 'addProcessor', 'enableLiveView'];
     flex-wrap: wrap;
     gap: 1rem;
     justify-content: flex-start;
-    margin-top: 2.5rem;
+    margin-top: 2.25rem;
   }
 
-  /* 4. Right Hand Standalone Image Styling */
+  /* 6. Logo & Glow Styling */
   .right-hero-column {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  .logo-glow-wrapper {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-  .large-hero-logo {
-    width: 100%;
-    max-width: 440px; /* Big right-hand graphic presentation */
-    height: auto;
-    filter: drop-shadow(0 0 25px rgba(0,0,0,0.3));
+  .logo-glow-wrapper::before {
+    content: '';
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(circle, rgba(245, 158, 11, 0.28) 0%, rgba(245, 158, 11, 0.05) 50%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(40px);
+    z-index: 0;
+    pointer-events: none;
   }
 
-  /* 5. Mobile responsive breakpoint stacking */
+  .large-hero-logo {
+    width: 100%;
+    max-width: 440px;
+    height: auto;
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 0 35px rgba(245, 158, 11, 0.4)) drop-shadow(0 0 70px rgba(0,0,0,0.8));
+    animation: float 5s ease-in-out infinite;
+    transition: filter 0.4s ease, transform 0.4s ease;
+  }
+
+  .large-hero-logo:hover {
+    filter: drop-shadow(0 0 50px rgba(245, 158, 11, 0.65)) drop-shadow(0 0 90px rgba(0,0,0,0.9));
+    transform: scale(1.04) translateY(-4px);
+  }
+
+  /* 7. Feature Highlights Grid */
+  .feature-highlights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    max-width: 1200px;
+    margin: 3.5rem auto 4.5rem auto;
+  }
+
+  .feature-stat-card {
+    padding: 1.35rem 1.25rem;
+    border-radius: 12px;
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(245, 158, 11, 0.04);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .feature-stat-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(245, 158, 11, 0.5);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(245, 158, 11, 0.2);
+  }
+
+  .stat-number {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #f59e0b;
+    margin-bottom: 0.35rem;
+    letter-spacing: -0.01em;
+  }
+
+  .stat-label {
+    font-size: 0.875rem;
+    color: #94a3b8;
+    line-height: 1.45;
+  }
+
+  /* 8. Section Headers & Video Cards */
+  .section-header-wrapper {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .glowing-section-title {
+    font-size: clamp(1.8rem, 3vw, 2.4rem) !important;
+    font-weight: 800 !important;
+    color: #ffffff;
+    margin-bottom: 0.5rem !important;
+    text-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+  }
+
+  .section-subtitle {
+    font-size: 1rem;
+    color: #94a3b8;
+    margin: 0;
+  }
+
+  .video-card-container {
+    border: 1px solid rgba(245, 158, 11, 0.25) !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    background: rgba(15, 23, 42, 0.6) !important;
+    backdrop-filter: blur(12px) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(245, 158, 11, 0.05) !important;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease !important;
+  }
+
+  .video-card-container:hover {
+    transform: translateY(-6px) scale(1.01) !important;
+    border-color: rgba(245, 158, 11, 0.6) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(245, 158, 11, 0.25) !important;
+  }
+
+  .video-header-badge {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.55);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #e2e8f0;
+  }
+
+  /* 9. Mobile Responsive Breakpoints */
   @media (max-width: 64rem) {
     .split-hero-container {
       grid-template-columns: 1fr;
@@ -152,12 +377,16 @@ export const highlights = ['VisionPortal', 'addProcessor', 'enableLiveView'];
       text-align: center;
     }
 
+    .hero-badge-row {
+      justify-content: center;
+    }
+
     .action-buttons-wrapper {
       justify-content: center;
     }
 
     .right-hero-column {
-      order: -1; /* Puts the logo back on top for phone screens */
+      order: -1;
     }
 
     .large-hero-logo {
