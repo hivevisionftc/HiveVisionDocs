@@ -1,244 +1,63 @@
 ---
-title: Hive Vision Overview
-description: A complete overview of Hive Vision capabilities, co-processor acceleration, color pipelines, and autonomous tracking for FTC robots.
+title: Overview
+description: What Hive Vision is, what it detects, and which camera to choose.
 ---
 
-import { Aside, Badge, Card, CardGrid, Code, Steps, FileTree, Tabs, TabItem, LinkButton } from '@astrojs/starlight/components';
+import { Aside, Badge, Steps } from '@astrojs/starlight/components';
 
-**Hive Vision** is an optimized, easy-to-use computer vision framework engineered specifically for **FIRST Tech Challenge (FTC)** teams. Built from the ground up by student developers, Hive Vision empowers robots with competitive neural object detection, real-time color thresholding, target auto-alignment, and dynamic spline path generation.
+**Hive Vision** is a computer vision package for FIRST Tech Challenge (FTC) robots. It detects game pieces — yellow pollen, blue nectar, and red nectar — and reports their position in the camera view. It can be integrated with your camera of choice. Currently Hive Vision supports:
 
-Whether you're running hardware-accelerated deep neural networks on co-processors or native HSV color tracking on the FTC Control Hub, Hive Vision provides a seamless bridge between raw camera feeds and autonomous trajectory execution.
+- <Badge text="Limelight 3A" variant="note" />
+- <Badge text="Webcam" variant="caution" />
 
-<div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', margin: '1rem 0 2rem 0' }}>
-  <Badge text="Limelight 3A Coprocessor" variant="note" />
-  <Badge text="Control Hub OpenCV" variant="caution" />
-  <Badge text="PedroPathing Integration" variant="success" />
-  <Badge text="FTC SDK Ready" variant="tip" />
-</div>
+## What it detects
 
----
+Hive Vision labels each game piece it sees as `yellow_pollen`, `blue_nectar`, or `red_nectar`. On the Limelight 3A, each detection also includes a confidence score. You can use these results to drive toward a piece, line up with it, or decide what to pick up next.
 
-## Visual Showcase & Demos
+## Choose your camera
 
-Explore Hive Vision in action across neural object tracking, live camera streams, teleop auto-chasing, and autonomous path generation.
+Both options give you detection. They differ in where the processing runs and how they are set up.
 
-<CardGrid stack>
-  <Card title="Neural Network Target Detection" icon="eye">
-    Limelight 3A running SSD MobileNet V2 neural detection at high FPS to identify and bounding-box game entities in real time.
+|  | Limelight 3A | Webcam |
+| --- | --- | --- |
+| **Detection** | Neural network | HSV color thresholding |
+| **Runs on** | Limelight's own processor | Control Hub |
+| **Extra hardware** | Limelight 3A | Webcam |
+| **Confidence scores** | Yes | No |
+| **Best for** | Keeping vision off your robot code | Teams that already have a webcam |
 
-    <div style={{ border: '1px solid var(--sl-color-hairline-light, #334155)', borderRadius: '8px', overflow: 'hidden', marginTop: '1rem' }}>
-      <video autoPlay loop muted playsInline width="100%" style={{ display: 'block', objectFit: 'cover' }}>
-        <source src="/detection.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-    </div>
-  </Card>
+### Limelight 3A
 
-  <Card title="Live Field Tracking & Pathing" icon="rocket">
-    On-robot neural detection combined with dynamic cost algorithms to compute optimal field trajectories.
+Hive Vision supports the Limelight 3A with an all-inclusive neural network package that you add to your pipeline to start tracking. The Limelight runs the detector on its own processor, so detection is unaffected by the FTC SDK and your robot code keeps its own resources. The model was trained on about 14,000 labeled images.
 
-    <div style={{ border: '1px solid var(--sl-color-hairline-light, #334155)', borderRadius: '8px', overflow: 'hidden', marginTop: '1rem' }}>
-      <video autoPlay loop muted playsInline width="100%" style={{ display: 'block', objectFit: 'cover' }}>
-        <source src="/arush.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-    </div>
-  </Card>
-</CardGrid>
+[Install for Limelight 3A →](/installation/limelight)
 
-### Action Demos
+### Webcam
 
-<CardGrid>
-  <Card title="Demo: TeleOp Auto-Chase Driver Support" icon="play">
+Hive Vision also offers a full package for HSV color detection on a webcam connected to your Control Hub. It uses color thresholding rather than a trained model, so it needs no model and no extra hardware beyond the webcam. Detection runs on the Control Hub itself, alongside your robot code.
 
-    <video autoPlay loop muted playsInline width="200%" style={{ borderRadius: '6px', display: 'block', marginTop: '0.75rem' }}>
-      <source src="/47Beavers.mp4" type="video/mp4" />
-    </video>
-  </Card>
+[Install for Webcam →](/installation/webcam)
 
-  <Card title="Demo: PedroPathing Dynamic Spline Trajectory" icon="right-arrow">
+## Examples
 
-    <video autoPlay loop muted playsInline width="75%" style={{ borderRadius: '6px', display: 'block', marginTop: '0.75rem' }}>
-      <source src="/hi.mov" type="video/mp4" />
-    </video>
-  </Card>
+The **Usages** section shows how other teams built code around Hive Vision. Each example is a working OpMode you can start from.
 
-  <Card title="Demo: Webcam HSV Color Thresholding" icon="laptop">
+| Example | What it does |
+| --- | --- |
+| [Limelight TeleOp — Driving](/reference/teleop) | Drive toward detected game pieces and toggle Auto-Chase. |
+| [Limelight TeleOp — Pathing](/reference/auto) | Generate a spline that travels through detected game pieces. |
+| [Webcam TeleOp — Driving](/reference/webcamteleop) | Run the same idea with HSV detection on the Control Hub. |
 
-    <video autoPlay loop muted playsInline width="100%" style={{ borderRadius: '6px', display: 'block', marginTop: '0.75rem' }}>
-      <source src="/nemo.mov" type="video/mp4" />
-    </video>
-  </Card>
-
-
-</CardGrid>
-
----
-
-## Complete Core Capabilities
-
-Hive Vision comes packed with features designed to solve the toughest computer vision and autonomous pathing challenges in FTC.
-
-### 1. Dual Vision Processing Architecture
-
-Hive Vision supports two distinct hardware pathways depending on your team's budget, hardware availability, and processing requirements:
-
-<Tabs>
-  <TabItem label="Limelight 3A (Coprocessor)" icon="cpu">
-    - **Zero Control Hub Load**: Neural inference runs entirely on the Limelight 3A's internal CPU/NPU coprocessor.
-    - **MobileNet V2 SSD Model**: Pre-trained model (`best_limelight3a_ssd_mobilenetv2_300x300_v2_int8_dets25.tflite`) recognizing yellow pollen, red nectar, and blue nectar.
-    - **High Resolution & Frame Rate**: Maintains crisp detection without causing loop-time lag in robot TeleOp or Autonomous code.
-    - **Custom Thresholding & Gain Control**: Fine-tune sensor gain (~20), exposure (~2200), and confidence cutoffs (0.3–0.4) right from the Limelight Web UI.
-  </TabItem>
-
-  <TabItem label="Control Hub Webcam (OpenCV HSV)" icon="camera">
-    - **Zero Extra Hardware Required**: Runs directly on standard USB webcams connected to the REV Control Hub.
-    - **VisionPortal Processor**: Plugs directly into `org.firstinspires.ftc.vision.VisionPortal` using `BallDetectorPipeline`.
-    - **Normalized Coordinates**: Calculates normalized center coordinates (`cxNorm`, `cyNorm`) between `0.0` and `1.0` across the screen frame.
-    - **Color Gate Filtering**: Instant color queries via `baller.bestOf(BallColor.RED)`, `BLUE`, or `YELLOW`.
-  </TabItem>
-</Tabs>
-
----
-
-### 2. Physical 3D Spatial Calculation & Offsets
-
-Transforming 2D camera pixels into physical 3D robot target coordinates requires accounting for camera mounting geometry. Hive Vision standardizes physical offsets so you can accurately measure distance to detected entities:
-
-```java
-public class CVConstants {
-    // Camera lens height above the field floor (inches) minus 1.4 inch object calibration offset
-    public static double CAMERA_HEIGHT = 14.5;
-
-    // Downward camera pitch angle (0.0 = pointing level parallel to ground)
-    public static double CAMERA_PITCH = Math.toRadians(25.0);
-
-    // Distance from the robot's center of rotation to the camera lens (inches)
-    public static double FORWARD_OFFSET = 6.0;
-}
-```
-
----
-
-### 3. PedroPathing Autonomous Trajectory Generation
-
-Hive Vision integrates seamlessly with **PedroPathing** for automated spline trajectory generation (`CVPathGen` and `CVCostAlgo`).
+## Get started
 
 <Steps>
-1. **Target Identification**: Neural network or color detector identifies target entities in the field of view.
-2. **Cost Evaluation (`CVCostAlgo`)**: Evaluates entity positions relative to the robot heading, selecting targets that minimize drive time and turning angle.
-3. **Bezier Curve Construction (`CVPathGen`)**: Constructs continuous Bezier splines connecting the current robot pose to the target location.
-4. **Automated Spline Execution**: Driver presses `gamepad1.a` to trigger smooth spline navigation through detected pollen and nectar.
+1. Pick a camera from the two options above.
+2. Follow its install guide under **Installation** in the sidebar.
+3. Try a working example from the table above.
 </Steps>
 
----
+## What is next
 
-### 4. TeleOp Auto-Chase & Color Selector
+AprilTag detection is on the way. Follow the [GitHub repository](https://github.com/hivevisionftc/Hive-Vision) for updates, or join the [Discord](https://discord.gg/ga5WphW4QZ) to ask questions.
 
-Hive Vision isn't just for Autonomous—it provides critical driver assistance during TeleOp matches:
-
-- **Filter Selection on the Fly**:
-  - `D-pad UP`: Selects **RED** entities only.
-  - `D-pad DOWN`: Selects **BLUE** entities only.
-  - `D-pad LEFT`: Selects **RED + BLUE** entities.
-  - `D-pad RIGHT`: Selects **ALL** colors (RED, BLUE, and YELLOW).
-- **One-Button Auto-Chase (`Right Bumper`)**:
-  - Pressing **RB** toggles Auto-Chase mode. The drivetrain automatically turns toward and approaches the target object.
-  - Full manual override is restored when Auto-Chase is toggled off.
-
----
-
-## Architecture Comparison
-
-| Feature | Limelight 3A Pipeline | Control Hub Webcam Pipeline |
-| :--- | :--- | :--- |
-| **Detection Method** | SSD MobileNet V2 Neural Net (`.tflite`) | OpenCV HSV Color Thresholding (`BallDetectorPipeline`) |
-| **Processing Host** | Limelight 3A Internal Processor | REV Control Hub CPU |
-| **FTC SDK Impact** | 0% CPU Overhead on Control Hub | Minimal (VisionPortal Threading) |
-| **Object Recognition** | Entity Shape + Class Labeling | Color-Based Blob Detection |
-| **Setup Complexity** | Web Dashboard Upload | Drop-in `.java` TeamCode Files |
-| **Recommended Use** | Competitive Matches & Autonomous | Budget-Friendly & Rapid Prototyping |
-
----
-
-## Library Code Examples
-
-Here is how simple it is to integrate Hive Vision into your FTC code base:
-
-<Tabs>
-  <TabItem label="VisionPortal Setup (Webcam)" icon="code">
-```java
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.opencv.core.Size;
-
-// Instantiate the Hive Vision BallDetectorPipeline
-BallDetectorPipeline baller = new BallDetectorPipeline();
-
-// Register with FTC VisionPortal
-VisionPortal portal = new VisionPortal.Builder()
-        .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
-        .setCameraResolution(new Size(1280, 720))
-        .addProcessor(baller)
-        .enableLiveView(true)
-        .build();
-```
-  </TabItem>
-
-  <TabItem label="Telemetry & Coordinate Query" icon="document">
-```java
-// Query highest-confidence RED target
-BallDetectorPipeline.BallBlob red = baller.bestOf(BallDetectorPipeline.BallColor.RED);
-
-if (red != null) {
-    // cxNorm and cyNorm return screen relative coordinates from 0.0 to 1.0
-    telemetry.addData("RED Target Found", "cx=%.2f cy=%.2f", red.cxNorm, red.cyNorm);
-} else {
-    telemetry.addData("RED Target", "None detected");
-}
-```
-  </TabItem>
-
-  <TabItem label="Limelight Pipeline Query" icon="terminal">
-```java
-// Querying Limelight 3A neural network pipeline outputs
-LLResult result = limelight.getLatestResult();
-if (result != null && result.isValid()) {
-    List<LLResultTypes.DetectorResult> detections = result.getDetectorResults();
-    for (LLResultTypes.DetectorResult detection : detections) {
-        String className = detection.getClassName(); // "yellow_pollen", "red_nectar", etc.
-        double confidence = detection.getConfidence();
-        double[] targetPose = detection.getTargetPoseRobotSpace();
-    }
-}
-```
-  </TabItem>
-</Tabs>
-
----
-
-## Getting Started
-
-Ready to install Hive Vision on your robot? Jump right into the setup guide for your camera of choice:
-
-<CardGrid>
-  <Card title="Limelight 3A Installation" icon="laptop">
-    Step-by-step guide to configuring your Limelight 3A co-processor with the Hive Vision Neural Network `.tflite` model.
-
-    <LinkButton href="/installation/limelight" variant="secondary">
-      Limelight Setup Guide →
-    </LinkButton>
-  </Card>
-
-  <Card title="Webcam Setup" icon="camera">
-    Step-by-step instructions for installing `BallDetectorPipeline` into your FTC `TeamCode` project for USB webcams.
-
-    <LinkButton href="/installation/webcam" variant="secondary">
-      Webcam Setup Guide →
-    </LinkButton>
-  </Card>
-</CardGrid>
-
-<Aside type="tip">
-  Need help or want to share your team's implementations? Join the official [Hive Vision Discord Community](https://discord.gg/D42uBwKPwb)!
-</Aside>
+<Aside type="tip">Not sure which camera fits your robot? Start with the Limelight 3A guide — it needs no extra hardware beyond the camera and keeps vision off your Control Hub.</Aside>

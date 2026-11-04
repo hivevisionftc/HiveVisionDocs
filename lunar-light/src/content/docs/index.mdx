@@ -1,396 +1,115 @@
 ---
-title: Welcome to Hive Vision
+title: Hive Vision
+description: Pollen and nectar detection for FTC robots. AprilTags are next.
 template: splash
 head:
   - tag: title
     content: Hive Vision
 ---
 
-import { Aside, Badge, CardGrid, Code, Steps, FileTree, LinkButton } from '@astrojs/starlight/components';
+<div class="hv">
 
-export const exampleCode = `VisionPortal portal = new VisionPortal.Builder()
-    .setCamera(webcamName)
-    .setCameraResolution(new Size(1280, 720))
-    .addProcessor(baller)
-    .enableLiveView(true)
-    .build();`;
-
-export const fileName = 'HiveVisionOpmode.java';
-export const highlights = ['VisionPortal', 'addProcessor', 'enableLiveView'];
-
-{/* 50/50 Grid Hero Container */}
-<div class="split-hero-container">
-
-  {/* LEFT COLUMN: Hero content, status pills, text, glowing code block, and buttons */}
-  <div class="left-hero-column">
-
-    <div class="hero-badge-row">
-      <span class="glow-pill">
-        <span class="pulse-dot"></span>
-        FTC Vision Ecosystem
-      </span>
-      <span class="glow-pill-alt">Limelight 3A & Webcam Ready</span>
-    </div>
-
-    <h1 class="gradient-hero-title">Hive Vision</h1>
-
-    <p class="custom-tagline">
-      An optimized, easy-to-use computer vision library tailored for FIRST Tech Challenge, built for your camera choice.
-    </p>
-
-    <div class="code-section-wrapper">
-      <Code code={exampleCode} lang="java" title={fileName} mark={highlights} />
-    </div>
-
-    <div class="action-buttons-wrapper">
-      <LinkButton href="/overview/overview" variant="minimal" icon="external">
-        Read the docs
-      </LinkButton>
-      <LinkButton href="/overview/aboutus" variant="secondary" icon="external">
-        About Us
-      </LinkButton>
-      <LinkButton href="https://discord.gg/D42uBwKPwb" variant="minimal" icon="discord">
-        Join our discord
-      </LinkButton>
+<section class="hv-hero">
+  <div>
+    <h1>Hive Vision</h1>
+    <p>Computer vision for FIRST Tech Challenge. Detect pollen and nectar with a Limelight 3A or a webcam.</p>
+    <div class="hv-btns">
+      <a class="hv-btn solid" href="/overview/overview">Get started</a>
+      <a class="hv-btn" href="https://github.com/hivevisionftc/Hive-Vision" target="_blank" rel="noopener">View on GitHub</a>
     </div>
   </div>
+  <img class="hv-hero-logo" src="/hive.png" alt="Hive Vision" width="498" height="501" decoding="async" />
+</section>
 
-  {/* RIGHT COLUMN: Floating glowing logo */}
-  <div class="right-hero-column">
-    <div class="logo-glow-wrapper">
-      <img src="/hive.png" alt="Hive Vision Logo" class="large-hero-logo" />
-    </div>
+<h2 class="hv-h2">Next steps</h2>
+<div class="hv-grid">
+  <div class="hv-card">
+    <h3>Choose your camera</h3>
+    <p>Read the <a href="/overview/overview">overview</a> to see what Hive Vision detects and which cameras it supports.</p>
   </div>
-
-</div>
-
-{/* FEATURE HIGHLIGHTS BAR */}
-<div class="feature-highlights-grid">
-  <div class="feature-stat-card">
-    <div class="stat-number">100% Offloaded</div>
-    <div class="stat-label">Zero Control Hub CPU overhead via Limelight 3A coprocessor neural net.</div>
+  <div class="hv-card">
+    <h3>Install for Limelight 3A</h3>
+    <p>Add the Hive Vision neural network to your Limelight pipeline. <a href="/installation/limelight">Limelight 3A guide</a>.</p>
   </div>
-  <div class="feature-stat-card">
-    <div class="stat-number">Sub-30ms</div>
-    <div class="stat-label">Real-time object bounding boxes for yellow pollen, red nectar, & blue nectar.</div>
+  <div class="hv-card">
+    <h3>Install for Webcam</h3>
+    <p>Run HSV color detection on a webcam connected to your Control Hub. <a href="/installation/webcam">Webcam guide</a>.</p>
   </div>
-  <div class="feature-stat-card">
-    <div class="stat-number">PedroPathing</div>
-    <div class="stat-label">Instant Bezier trajectory splines automatically driven from field target poses.</div>
-  </div>
-  <div class="feature-stat-card">
-    <div class="stat-number">OpenCV & TFLite</div>
-    <div class="stat-label">Flexible backends supporting SSD MobileNet V2 and Control Hub HSV color thresholding.</div>
+  <div class="hv-card">
+    <h3>Try a working example</h3>
+    <p>Start from code other teams already run. <a href="/reference/teleop">See the usages</a>.</p>
   </div>
 </div>
 
----
-
-<div class="section-header-wrapper">
-  <h2 class="glowing-section-title">Neural Networking & Live Detection</h2>
-  <p class="section-subtitle">Real-time inference feeds, target tracking, and autonomous field pathing in action.</p>
-</div>
-
-<CardGrid>
-  <div class="video-card-container">
-    <div class="video-header-badge">
-      <span>⚡ Neural Network Detection</span>
-      <Badge text="Limelight 3A SSD MobileNet V2" variant="note" />
-    </div>
-    <video autoPlay loop muted playsInline width="100%" style={{ display: 'block', objectFit: 'cover' }}>
-      <source src="/detection.mp4" type="video/mp4" />
-      Your browser does not support the video tag.
+<h2 class="hv-h2">See it in action</h2>
+<div class="hv-vids">
+  <figure class="hv-fig">
+    <video autoPlay loop muted playsInline preload="metadata" aria-label="Limelight 3A detecting pollen and nectar">
+      <source src="/media/limelight.mp4" type="video/mp4" />
     </video>
-  </div>
-
-  <div class="video-card-container">
-    <div class="video-header-badge">
-      <span>🎯 Live Field Pathing & Splines</span>
-      <Badge text="PedroPathing Integration" variant="success" />
-    </div>
-    <video autoPlay loop muted playsInline width="100%" style={{ display: 'block', objectFit: 'cover' }}>
-      <source src="/arush.mp4" type="video/mp4" />
-      Your browser does not support the video tag.
+    <figcaption><strong>Limelight 3A.</strong> Neural detection trained on about 14,000 labeled images.</figcaption>
+  </figure>
+  <figure class="hv-fig">
+    <video autoPlay loop muted playsInline preload="metadata" aria-label="Control Hub robot driving to detected game pieces">
+      <source src="/media/controlhub.mp4" type="video/mp4" />
     </video>
-  </div>
-</CardGrid>
+    <figcaption><strong>Control Hub.</strong> OpenCV on a webcam, with no model and no extra hardware.</figcaption>
+  </figure>
+</div>
 
-<style is:global>{`
-  /* 1. Clear out default Starlight header/top padding on splash content */
-  .sl-markdown-content > :first-child {
-    margin-top: 0 !important;
-  }
+<section class="hv-end">
+  <div><h2>Built to win.</h2></div>
+  <div><h4>Project</h4><ul><li><a href="/overview/overview">Documentation</a></li><li><a href="https://github.com/hivevisionftc/Hive-Vision" target="_blank" rel="noopener">GitHub</a></li><li><a href="https://discord.gg/ga5WphW4QZ" target="_blank" rel="noopener">Discord</a></li></ul></div>
+  <div><h4>Follow</h4><div class="hv-socs"><a class="hv-soc" href="https://www.instagram.com/hivevisionftc/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.03.084c-1.277.06-2.149.264-2.91.563a5.9 5.9 0 0 0-2.124 1.388 5.9 5.9 0 0 0-1.38 2.127C.321 4.926.12 5.8.064 7.076s-.069 1.688-.063 4.947.021 3.667.083 4.947c.061 1.277.264 2.149.563 2.911.308.789.72 1.457 1.388 2.123a5.9 5.9 0 0 0 2.129 1.38c.763.295 1.636.496 2.913.552 1.278.056 1.689.069 4.947.063s3.668-.021 4.947-.082c1.28-.06 2.147-.265 2.91-.563a5.9 5.9 0 0 0 2.123-1.388 5.9 5.9 0 0 0 1.38-2.129c.295-.763.496-1.636.551-2.912.056-1.28.07-1.69.063-4.948-.006-3.258-.02-3.667-.081-4.947-.06-1.28-.264-2.148-.564-2.911a5.9 5.9 0 0 0-1.387-2.123 5.86 5.86 0 0 0-2.128-1.38C19.074.322 18.202.12 16.924.066 15.647.009 15.236-.006 11.977 0S8.31.021 7.03.084m.14 21.693c-1.17-.05-1.805-.245-2.228-.408a3.7 3.7 0 0 1-1.382-.895 3.7 3.7 0 0 1-.9-1.378c-.165-.423-.363-1.058-.417-2.228-.06-1.264-.072-1.644-.08-4.848-.006-3.204.006-3.583.061-4.848.05-1.169.246-1.805.408-2.228.216-.561.477-.96.895-1.382a3.7 3.7 0 0 1 1.379-.9c.423-.165 1.057-.361 2.227-.417 1.265-.06 1.644-.072 4.848-.08 3.203-.006 3.583.006 4.85.062 1.168.05 1.804.244 2.227.408.56.216.96.475 1.382.895s.681.817.9 1.378c.165.422.362 1.056.417 2.227.06 1.265.074 1.645.08 4.848.005 3.203-.006 3.583-.061 4.848-.051 1.17-.245 1.805-.408 2.23-.216.56-.477.96-.896 1.38a3.7 3.7 0 0 1-1.378.9c-.422.165-1.058.362-2.226.418-1.266.06-1.645.072-4.85.079s-3.582-.006-4.848-.06m9.783-16.192a1.44 1.44 0 1 0 1.437-1.442 1.44 1.44 0 0 0-1.437 1.442M5.839 12.012a6.161 6.161 0 1 0 12.323-.024 6.162 6.162 0 0 0-12.323.024M8 12.008A4 4 0 1 1 12.008 16 4 4 0 0 1 8 12.008"/></svg></a><a class="hv-soc" href="https://www.youtube.com/@HiveVisionFTC/shorts" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.02 3.02 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.02 3.02 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.02 3.02 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.02 3.02 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814M9.545 15.568V8.432L15.818 12z"/></svg></a><a class="hv-soc" href="https://www.tiktok.com/@hivevisionftc" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07"/></svg></a><a class="hv-soc" href="https://x.com/hivevisionftc" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg></a><a class="hv-soc" href="https://github.com/hivevisionftc/Hive-Vision" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a><a class="hv-soc" href="https://discord.gg/ga5WphW4QZ" target="_blank" rel="noopener" aria-label="Discord"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.37a19.8 19.8 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.3 18.3 0 0 0-5.487 0 13 13 0 0 0-.617-1.25.08.08 0 0 0-.079-.037A19.7 19.7 0 0 0 3.677 4.37a.1.1 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.08.08 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.08.08 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13 13 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10 10 0 0 0 .372-.292.07.07 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.07.07 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.08.08 0 0 0 .084.028 19.8 19.8 0 0 0 6.002-3.03.08.08 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.06.06 0 0 0-.031-.03M8.02 15.33c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418m7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418"/></svg></a></div></div>
+</section>
 
-  /* 2. Keyframe Animations */
-  @keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-12px) rotate(1.5deg); }
-  }
+</div>
 
-  @keyframes pulseDot {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.3; transform: scale(1.4); }
-  }
+<style is:global>{`@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,500;0,700;1,500&display=swap');
 
-  /* 3. Hero Status Pills */
-  .hero-badge-row {
-    display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-bottom: 1.25rem;
-  }
+.hv{max-width:1080px;margin:0 auto;color:#c9c9d0;font-family:'Chakra Petch',system-ui,sans-serif}
+.hv h1,.hv h2,.hv h3,.hv h4,.hv p{margin:0}.hv a{text-decoration:none}
 
-  .glow-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.35rem 0.85rem;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #fbbf24;
-    background: rgba(245, 158, 11, 0.12);
-    border: 1px solid rgba(245, 158, 11, 0.35);
-    border-radius: 9999px;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
-  }
+.hv .hv-hero{display:grid;grid-template-columns:1.2fr 1fr;gap:3rem;align-items:center;padding:3.5rem 0 3rem}
+.hv .hv-hero h1{font-size:clamp(2.8rem,7vw,4.6rem);font-weight:700;line-height:1;letter-spacing:.02em;text-transform:uppercase;color:#fff;margin-bottom:1rem}
+.hv .hv-hero p{font-size:clamp(1.05rem,2vw,1.25rem);line-height:1.65;color:#a9a9b2;max-width:38ch;margin-bottom:2rem}
+.hv .hv-btns{display:flex;gap:.8rem;flex-wrap:wrap}
+.hv .hv-btn{display:inline-block;padding:.65rem 1.25rem;border:1px solid rgba(255,255,255,.6);color:#fff;font-weight:700;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;transition:background .2s ease,color .2s ease}
+[data-theme="dark"] body .hv a.hv-btn.solid{background:#fff;color:#000!important;border-color:#fff;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))}
+[data-theme="dark"] body .hv a.hv-btn:hover{background:#fff;color:#000!important}
+.hv .hv-hero-logo{display:block;width:100%;max-width:340px;height:auto;justify-self:center;filter:drop-shadow(0 0 60px rgba(255,255,255,.12))}
 
-  .pulse-dot {
-    width: 8px;
-    height: 8px;
-    background-color: #f59e0b;
-    border-radius: 50%;
-    animation: pulseDot 2s infinite ease-in-out;
-    box-shadow: 0 0 8px #f59e0b;
-  }
+.hv .hv-h2{color:#fff;font-size:clamp(1.5rem,3vw,2rem);font-weight:700;letter-spacing:.03em;text-transform:uppercase;margin:2.5rem 0 1.25rem;padding-top:1.75rem;border-top:1px solid rgba(255,255,255,.18)}
 
-  .glow-pill-alt {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.35rem 0.85rem;
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: #cbd5e1;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 9999px;
-  }
+.hv .hv-grid{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:minmax(8.25rem,auto);gap:1rem}
+.hv .hv-card{display:flex;flex-direction:column;justify-content:center;min-height:8.25rem;margin:0!important;border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:1.2rem 1.3rem;background:rgba(255,255,255,.02);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.hv .hv-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.35);box-shadow:0 12px 30px rgba(255,255,255,.06)}
+.hv .hv-card h3{color:#fff;font-size:1.05rem;letter-spacing:.04em;text-transform:uppercase;margin-bottom:.5rem}
+.hv .hv-card p{font-size:.92rem;line-height:1.6;color:#a9a9b2}
+[data-theme="dark"] body .hv .hv-grid .hv-card p a{color:#8ab4ff!important;text-decoration:underline;text-underline-offset:3px}
+[data-theme="dark"] body .hv .hv-grid .hv-card p a:hover{color:#fff!important}
 
-  .gradient-hero-title {
-    font-size: clamp(2.8rem, 5.5vw, 4.2rem) !important;
-    font-weight: 900 !important;
-    line-height: 1.1 !important;
-    letter-spacing: -0.03em;
-    background: linear-gradient(135deg, #ffffff 0%, #fef3c7 35%, #f59e0b 70%, #d97706 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 1rem !important;
-    filter: drop-shadow(0 0 30px rgba(245, 158, 11, 0.3));
-  }
+.hv .hv-vids{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.hv .hv-fig{margin:0}
+.hv .hv-fig video{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:#000}
+.hv .hv-fig figcaption{margin-top:.6rem;font-size:.9rem;line-height:1.5;color:#8a8a94}
+.hv .hv-fig figcaption strong{color:#fff}
 
-  /* 4. Main 50/50 Columns Wrapper */
-  .split-hero-container {
-    display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 4rem;
-    align-items: center;
-    max-width: 1200px;
-    margin: 1.5rem auto 4rem auto;
-  }
+.hv .hv-end{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:2rem;align-items:start;margin-top:4.5rem;padding-top:2.5rem;border-top:1px solid rgba(255,255,255,.4)}
+.hv .hv-end h2{font-size:clamp(2rem,4vw,2.8rem);font-weight:700;line-height:1;letter-spacing:.02em;text-transform:uppercase;color:#fff}
+.hv .hv-end h4{margin:0 0 .8rem;color:#fff;font-size:.85rem;letter-spacing:.05em;text-transform:uppercase}
+.hv .hv-end ul{list-style:none;margin:0;padding:0;display:grid;gap:.5rem}.hv .hv-end li{margin:0}
+.hv .hv-end li a{color:#a9a9b2;font-size:.9rem}.hv .hv-end li a:hover{color:#fff}
+.hv .hv-socs{display:flex;flex-wrap:wrap;gap:.5rem}
+.hv .hv-soc{display:grid;place-items:center;width:2.4rem;height:2.4rem;border:1px solid rgba(255,255,255,.4);border-radius:6px;color:#fff}
+.hv .hv-soc svg{width:1.1rem;height:1.1rem}.hv .hv-soc:hover{background:#fff;color:#000}
 
-  /* 5. Left Column Alignment */
-  .left-hero-column {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-  }
-
-  .custom-tagline {
-    font-size: var(--sl-text-bg) !important;
-    color: #cbd5e1;
-    line-height: 1.6;
-    margin-bottom: 2rem !important;
-  }
-
-  .code-section-wrapper {
-    position: relative;
-    border-radius: 12px;
-    padding: 2px;
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.4) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(245, 158, 11, 0.25) 100%);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(245, 158, 11, 0.18);
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
-  }
-
-  .code-section-wrapper:hover {
-    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7), 0 0 35px rgba(245, 158, 11, 0.35);
-    transform: translateY(-2px);
-  }
-
-  .action-buttons-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: flex-start;
-    margin-top: 2.25rem;
-  }
-
-  /* 6. Logo & Glow Styling */
-  .right-hero-column {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-  }
-
-  .logo-glow-wrapper {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .logo-glow-wrapper::before {
-    content: '';
-    position: absolute;
-    width: 280px;
-    height: 280px;
-    background: radial-gradient(circle, rgba(245, 158, 11, 0.28) 0%, rgba(245, 158, 11, 0.05) 50%, transparent 70%);
-    border-radius: 50%;
-    filter: blur(40px);
-    z-index: 0;
-    pointer-events: none;
-  }
-
-  .large-hero-logo {
-    width: 100%;
-    max-width: 440px;
-    height: auto;
-    position: relative;
-    z-index: 1;
-    filter: drop-shadow(0 0 35px rgba(245, 158, 11, 0.4)) drop-shadow(0 0 70px rgba(0,0,0,0.8));
-    animation: float 5s ease-in-out infinite;
-    transition: filter 0.4s ease, transform 0.4s ease;
-  }
-
-  .large-hero-logo:hover {
-    filter: drop-shadow(0 0 50px rgba(245, 158, 11, 0.65)) drop-shadow(0 0 90px rgba(0,0,0,0.9));
-    transform: scale(1.04) translateY(-4px);
-  }
-
-  /* 7. Feature Highlights Grid */
-  .feature-highlights-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.25rem;
-    max-width: 1200px;
-    margin: 3.5rem auto 4.5rem auto;
-  }
-
-  .feature-stat-card {
-    padding: 1.35rem 1.25rem;
-    border-radius: 12px;
-    background: rgba(15, 23, 42, 0.5);
-    border: 1px solid rgba(245, 158, 11, 0.2);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(245, 158, 11, 0.04);
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .feature-stat-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(245, 158, 11, 0.5);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(245, 158, 11, 0.2);
-  }
-
-  .stat-number {
-    font-size: 1.35rem;
-    font-weight: 800;
-    color: #f59e0b;
-    margin-bottom: 0.35rem;
-    letter-spacing: -0.01em;
-  }
-
-  .stat-label {
-    font-size: 0.875rem;
-    color: #94a3b8;
-    line-height: 1.45;
-  }
-
-  /* 8. Section Headers & Video Cards */
-  .section-header-wrapper {
-    text-align: center;
-    margin-bottom: 2.5rem;
-  }
-
-  .glowing-section-title {
-    font-size: clamp(1.8rem, 3vw, 2.4rem) !important;
-    font-weight: 800 !important;
-    color: #ffffff;
-    margin-bottom: 0.5rem !important;
-    text-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
-  }
-
-  .section-subtitle {
-    font-size: 1rem;
-    color: #94a3b8;
-    margin: 0;
-  }
-
-  .video-card-container {
-    border: 1px solid rgba(245, 158, 11, 0.25) !important;
-    border-radius: 12px !important;
-    overflow: hidden !important;
-    background: rgba(15, 23, 42, 0.6) !important;
-    backdrop-filter: blur(12px) !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(245, 158, 11, 0.05) !important;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease !important;
-  }
-
-  .video-card-container:hover {
-    transform: translateY(-6px) scale(1.01) !important;
-    border-color: rgba(245, 158, 11, 0.6) !important;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(245, 158, 11, 0.25) !important;
-  }
-
-  .video-header-badge {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.75rem 1rem;
-    background: rgba(0, 0, 0, 0.55);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #e2e8f0;
-  }
-
-  /* 9. Mobile Responsive Breakpoints */
-  @media (max-width: 64rem) {
-    .split-hero-container {
-      grid-template-columns: 1fr;
-      gap: 3rem;
-      margin-bottom: 3rem;
-    }
-
-    .left-hero-column {
-      text-align: center;
-    }
-
-    .hero-badge-row {
-      justify-content: center;
-    }
-
-    .action-buttons-wrapper {
-      justify-content: center;
-    }
-
-    .right-hero-column {
-      order: -1;
-    }
-
-    .large-hero-logo {
-      max-width: 260px;
-    }
-  }
+@media(max-width:50rem){
+  .hv .hv-hero{grid-template-columns:1fr;text-align:center;gap:2rem;padding-top:2rem}
+  .hv .hv-hero p{margin-left:auto;margin-right:auto}
+  .hv .hv-btns{justify-content:center}
+  .hv .hv-hero-logo{order:-1;max-width:200px}
+  .hv .hv-grid,.hv .hv-vids{grid-template-columns:1fr}
+  .hv .hv-end{grid-template-columns:1fr}
+}
 `}</style>
