@@ -1,0 +1,669 @@
+---
+// Side-view camera mounting simulator for the Limelight tuning guide.
+// The scene is drawn to scale in inches (1 in = 7 px). Colors come from the
+// Starlight theme variables so it matches the rest of the docs.
+---
+
+<div class="mountsim" data-mountsim>
+  <svg
+    class="ms-scene"
+    viewBox="0 0 800 245"
+    role="img"
+    aria-label="Side view of the robot with the Limelight on a post, showing the slice of floor the camera can see"
+  >
+    <g data-layer="dynamic"></g>
+    <g data-layer="balls"></g>
+  </svg>
+
+  <div class="ms-tools" role="group" aria-label="Balls on the floor">
+    <button type="button" class="ms-btn" data-add="pollen"><i class="ms-dot" style="background:#eab308"></i>Add pollen</button>
+    <button type="button" class="ms-btn" data-add="red"><i class="ms-dot" style="background:#ef4444"></i>Add red nectar</button>
+    <button type="button" class="ms-btn" data-add="blue"><i class="ms-dot" style="background:#3b82f6"></i>Add blue nectar</button>
+    <button type="button" class="ms-btn" data-remove>Remove selected</button>
+    <button type="button" class="ms-btn" data-clear>Clear</button>
+  </div>
+  <p class="ms-hint">Drag a ball along the floor to see where it drops out of view. Distances are measured from the robot's center of rotation.</p>
+
+  <div class="ms-grid">
+    <div class="ms-panel">
+      <div class="ms-panel-title">Mount</div>
+
+      <label class="ms-row">
+        <span class="ms-lab">Lens height, H <b data-out="h"></b></span>
+        <input type="range" data-in="h" min="8" max="22" step="0.1" value="15.9" />
+        <span class="ms-note" data-note="h"></span>
+      </label>
+
+      <label class="ms-row">
+        <span class="ms-lab">Downward pitch, θ <b data-out="th"></b></span>
+        <input type="range" data-in="th" min="0" max="60" step="1" value="25" />
+        <span class="ms-note" data-note="th"></span>
+      </label>
+
+      <label class="ms-row">
+        <span class="ms-lab">Forward offset, D <b data-out="d"></b></span>
+        <input type="range" data-in="d" min="0" max="10" step="0.5" value="6" />
+        <span class="ms-note" data-note="d"></span>
+      </label>
+
+      <button type="button" class="ms-btn" data-reset>Reset to guide values</button>
+    </div>
+
+    <div class="ms-panel">
+      <div class="ms-panel-title">What the camera sees (640×480)</div>
+      <svg class="ms-frame" viewBox="0 0 320 240" role="img" aria-label="Approximate camera frame showing where each ball lands in the image"></svg>
+      <div class="ms-frame-cap" data-out="frameCap"></div>
+    </div>
+
+    <div class="ms-panel">
+      <div class="ms-panel-title">Coverage</div>
+      <dl class="ms-dl">
+        <dt>Floor in view</dt><dd data-out="range"></dd>
+        <dt>Blind zone past bumper</dt><dd data-out="blind"></dd>
+        <dt>Image center hits floor</dt><dd data-out="center"></dd>
+        <dt>Selected ball</dt><dd data-out="ballStatus"></dd>
+        <dt>Balls in view</dt><dd data-out="ballCount"></dd>
+        <dt>Smallest ball in view</dt><dd data-out="ballPx"></dd>
+      </dl>
+    </div>
+
+    <div class="ms-panel">
+      <div class="ms-panel-title">
+        <span><code>CVConstants.java</code></span>
+        <button type="button" class="ms-btn ms-btn-small" data-copy>Copy</button>
+      </div>
+      <div class="ms-code" data-out="code"></div>
+    </div>
+  </div>
+  <p class="ms-foot">
+    Drawn for a robot 18 in long, balls whose centers sit 1.4 in off the floor, and the Limelight 3A's 42° vertical view.
+    The far edge of the view is farther than the model can pick out a ball, so treat it as an upper bound.
+  </p>
+</div>
+
+<style is:global>
+  .mountsim {
+    --ms-line: var(--sl-color-gray-2, #c0c2c7);
+    --ms-mid: var(--sl-color-gray-3, #888b96);
+    --ms-dim: var(--sl-color-gray-4, #545861);
+    --ms-edge: var(--sl-color-gray-5, #353841);
+    --ms-text: var(--sl-color-white, #fff);
+    --ms-accent: var(--sl-color-text-accent, #f59e0b);
+    border: 1px solid var(--ms-edge);
+    border-radius: 0.5rem;
+    background: var(--sl-color-black, #000);
+    padding: 14px 14px 12px;
+    margin: 1.5rem 0;
+  }
+  .mountsim * { margin: 0; }
+  .mountsim .ms-scene { display: block; width: 100%; height: auto; }
+  .mountsim .ms-hint,
+  .mountsim .ms-foot { font-size: 0.78rem; line-height: 1.4; color: var(--ms-mid); }
+  .mountsim .ms-hint { margin-top: 8px; }
+  .mountsim .ms-foot { margin-top: 12px; color: var(--ms-dim); }
+
+  .mountsim .ms-tools { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .mountsim .ms-dot {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: -1px;
+  }
+
+  .mountsim .ms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .mountsim .ms-panel {
+    border: 1px solid var(--ms-edge);
+    border-radius: 0.4rem;
+    padding: 10px 12px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+  }
+  .mountsim .ms-panel-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ms-mid);
+  }
+  .mountsim .ms-panel-title code {
+    font-size: 0.78rem;
+    text-transform: none;
+    letter-spacing: 0;
+    background: none;
+    border: 0;
+    padding: 0;
+    color: var(--ms-mid);
+  }
+
+  .mountsim .ms-row { display: flex; flex-direction: column; gap: 4px; cursor: pointer; }
+  .mountsim .ms-lab { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--ms-text); }
+  .mountsim .ms-lab b {
+    font-weight: 600;
+    font-family: var(--__sl-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+    font-size: 0.82rem;
+  }
+  .mountsim input[type="range"] { width: 100%; accent-color: var(--ms-accent); }
+  .mountsim .ms-note { font-size: 0.72rem; color: var(--ms-dim); }
+  .mountsim .ms-note.is-off { color: var(--ms-text); text-decoration: underline dotted; text-underline-offset: 3px; }
+
+  .mountsim .ms-btn {
+    align-self: flex-start;
+    font: inherit;
+    font-size: 0.8rem;
+    color: var(--ms-line);
+    background: transparent;
+    border: 1px solid var(--ms-edge);
+    border-radius: 0.35rem;
+    padding: 4px 10px;
+    cursor: pointer;
+  }
+  .mountsim .ms-btn:hover:not(:disabled) { border-color: var(--ms-mid); color: var(--ms-text); }
+  .mountsim .ms-btn:disabled { opacity: 0.4; cursor: default; }
+  .mountsim .ms-btn-small { font-size: 0.7rem; padding: 2px 8px; text-transform: none; letter-spacing: 0; }
+
+  .mountsim .ms-frame {
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    border: 1px solid var(--ms-edge);
+    border-radius: 3px;
+  }
+  .mountsim .ms-frame-cap { font-size: 0.75rem; color: var(--ms-mid); }
+
+  .mountsim .ms-dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 10px;
+    row-gap: 6px;
+    font-size: 0.82rem;
+  }
+  .mountsim .ms-dl dt { color: var(--ms-mid); }
+  .mountsim .ms-dl dd {
+    text-align: right;
+    color: var(--ms-text);
+    font-family: var(--__sl-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+    font-size: 0.78rem;
+  }
+
+  .mountsim .ms-code {
+    white-space: pre;
+    overflow-x: auto;
+    font-family: var(--__sl-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+    font-size: 0.74rem;
+    line-height: 1.6;
+    color: var(--ms-line);
+  }
+
+  .mountsim .ms-t { font-size: 10px; fill: var(--ms-mid); font-family: inherit; }
+  .mountsim .ms-t-strong { fill: var(--ms-text); }
+  .mountsim .ms-t-big { font-size: 12px; font-weight: 600; fill: var(--ms-text); }
+  .mountsim .ms-ball { cursor: grab; outline: none; touch-action: none; }
+  .mountsim .ms-ball:active { cursor: grabbing; }
+  .mountsim .ms-ball:focus-visible [data-ball="body"] { stroke: var(--ms-text); stroke-width: 2; }
+</style>
+
+<script>
+  // ---- constants (inches / degrees) ---------------------------------------
+  const VFOV = 42; // Limelight 3A vertical field of view
+  const HALF = VFOV / 2;
+  const BALL_R = 1.4; // ball center height; also the radius used to size it
+  const ROBOT_HALF = 9; // 18 in robot
+  const X_MIN = -14;
+  const X_MAX = 88;
+  const Y_TOP = 24;
+  const S = 7; // px per inch
+  const OX = 58;
+  const FLOOR = 190;
+  const F = 240 / Math.tan((HALF * Math.PI) / 180); // focal length in px at 640x480
+  const MAX_BALLS = 8;
+  const DEFAULTS = { h: 15.9, th: 25, d: 6 };
+  const RANGES = { h: [12, 16, ' in'], th: [20, 30, '°'] };
+  const KINDS = {
+    pollen: { fill: '#eab308', edge: '#a16207', name: 'pollen' },
+    red: { fill: '#ef4444', edge: '#991b1b', name: 'red nectar' },
+    blue: { fill: '#3b82f6', edge: '#1e40af', name: 'blue nectar' },
+  };
+  const OFF = { fill: '#3f3f46', edge: '#71717a' };
+  // sideways spread for added balls; only affects the camera frame preview
+  const LATS = [0, -5, 5, -10, 10, -15, 15, 0];
+
+  const rad = (a) => (a * Math.PI) / 180;
+  const sx = (x) => OX + (x - X_MIN) * S;
+  const sy = (y) => FLOOR - y * S;
+  const f1 = (n) => n.toFixed(1);
+  const dist = (x) => (x > 480 ? 'beyond 40 ft' : x >= 120 ? (x / 12).toFixed(1) + ' ft' : Math.round(x) + ' in');
+  const SVGNS = 'http://www.w3.org/2000/svg';
+
+  function clipPoly(poly) {
+    const planes = [
+      [1, 0, X_MAX],
+      [-1, 0, -X_MIN],
+      [0, -1, 0],
+      [0, 1, Y_TOP],
+    ];
+    for (const [nx, ny, c] of planes) {
+      const out = [];
+      for (let i = 0; i < poly.length; i++) {
+        const a = poly[i];
+        const b = poly[(i + 1) % poly.length];
+        const da = nx * a[0] + ny * a[1] - c;
+        const db = nx * b[0] + ny * b[1] - c;
+        if (da <= 0) out.push(a);
+        if ((da < 0 && db > 0) || (da > 0 && db < 0)) {
+          const t = da / (da - db);
+          out.push([a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1])]);
+        }
+      }
+      poly = out;
+      if (!poly.length) break;
+    }
+    return poly;
+  }
+
+  function rayEnd(o, dir) {
+    let t = Infinity;
+    if (dir[0] > 0) t = Math.min(t, (X_MAX - o[0]) / dir[0]);
+    if (dir[1] < 0) t = Math.min(t, (0 - o[1]) / dir[1]);
+    if (dir[1] > 0) t = Math.min(t, (Y_TOP - o[1]) / dir[1]);
+    return [o[0] + t * dir[0], o[1] + t * dir[1]];
+  }
+
+  const dirOf = (aDeg) => [Math.cos(rad(aDeg)), -Math.sin(rad(aDeg))];
+  const pts = (poly) => poly.map((p) => sx(p[0]).toFixed(1) + ',' + sy(p[1]).toFixed(1)).join(' ');
+  const ln = (x1, y1, x2, y2, attrs) =>
+    `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" ${attrs}/>`;
+
+  // ---- ball geometry ---------------------------------------------------------
+  function ballGeom(st, b) {
+    const dx = b.x - st.d;
+    const dy = st.h - BALL_R;
+    const phi = (Math.atan2(dy, dx) * 180) / Math.PI;
+    const delta = phi - st.th; // positive = lower in the image
+    const okV = dx > 0.1 && Math.abs(delta) <= HALF;
+    const row = delta > -89 && delta < 89 ? 240 + F * Math.tan(rad(delta)) : null;
+    const axis = Math.hypot(dx, dy) * Math.cos(rad(delta));
+    const wpx = axis > 0.5 ? (F * 2 * BALL_R) / axis : null;
+    const col = axis > 0.5 ? 320 + (F * b.lat) / axis : null;
+    const okH = col !== null && Math.abs(col - 320) <= 320;
+    const inView = okV && okH;
+    const reason = inView ? 'in view' : !okV ? (delta > HALF || dx <= 0.1 ? 'too close' : 'too far') : 'off to the side';
+    return { dx, delta, inView, reason, row, col, wpx, axis };
+  }
+
+  // ---- scene ---------------------------------------------------------------
+  function sceneMarkup(st, selGeom, sel) {
+    const { h: L, th, d: D } = st;
+    const o = [D, L];
+    const aNear = th + HALF;
+    const aFar = th - HALF;
+    const R = 600;
+    const tri = [
+      o,
+      [o[0] + R * dirOf(aNear)[0], o[1] + R * dirOf(aNear)[1]],
+      [o[0] + R * dirOf(aFar)[0], o[1] + R * dirOf(aFar)[1]],
+    ];
+    const wedge = clipPoly(tri);
+
+    const stroke = (c, w, extra = '') => `stroke="${c}" stroke-width="${w}" fill="none" ${extra}`;
+    const LINE = 'var(--ms-line)';
+    const MID = 'var(--ms-mid)';
+    const DIM = 'var(--ms-dim)';
+    const ACC = 'var(--ms-accent)';
+    let s = '';
+
+    if (wedge.length > 2) s += `<polygon points="${pts(wedge)}" fill="${ACC}" fill-opacity="0.12" stroke="none"/>`;
+
+    // 18 in size limit
+    s += `<rect x="${sx(-ROBOT_HALF)}" y="${sy(18)}" width="${18 * S}" height="${18 * S}" ${stroke(DIM, 1, 'stroke-dasharray="3 3"')}/>`;
+    s += `<text x="${sx(-ROBOT_HALF)}" y="${sy(18) - 5}" class="ms-t">18 in limit</text>`;
+
+    // floor and ticks
+    s += ln(sx(X_MIN), FLOOR, sx(X_MAX), FLOOR, `stroke="${MID}" stroke-width="1.5"`);
+    for (let x = 0; x <= 84; x += 12) {
+      const major = x % 24 === 0;
+      s += ln(sx(x), FLOOR, sx(x), FLOOR + (major ? 6 : 4), `stroke="${MID}" stroke-width="1"`);
+      s += `<text x="${sx(x)}" y="${FLOOR + 18}" text-anchor="middle" class="ms-t">${x}</text>`;
+    }
+    s += `<text x="${sx(X_MAX)}" y="${FLOOR + 50}" text-anchor="end" class="ms-t">inches from center of rotation</text>`;
+
+    // visible floor
+    const nearHit = D + L / Math.tan(rad(aNear));
+    const farHit = aFar > 0.05 ? D + L / Math.tan(rad(aFar)) : Infinity;
+    const segEnd = Math.min(farHit, X_MAX);
+    if (nearHit < X_MAX) s += ln(sx(nearHit), FLOOR, sx(segEnd), FLOOR, `stroke="${ACC}" stroke-width="3.5"`);
+
+    // blind zone
+    const blind = nearHit - ROBOT_HALF;
+    if (blind > 1 && nearHit < X_MAX) {
+      const y = FLOOR + 32;
+      s += ln(sx(ROBOT_HALF), y, sx(nearHit), y, `stroke="${LINE}" stroke-width="1"`);
+      s += ln(sx(ROBOT_HALF), y - 3, sx(ROBOT_HALF), y + 3, `stroke="${LINE}" stroke-width="1"`);
+      s += ln(sx(nearHit), y - 3, sx(nearHit), y + 3, `stroke="${LINE}" stroke-width="1"`);
+      s += `<text x="${(sx(ROBOT_HALF) + sx(nearHit)) / 2}" y="${y - 5}" text-anchor="middle" class="ms-t ms-t-strong">blind zone ${Math.round(blind)} in</text>`;
+    }
+
+    // robot side profile
+    s += `<rect x="${sx(-ROBOT_HALF)}" y="${sy(3.6)}" width="${18 * S}" height="${3 * S}" rx="3" fill="var(--sl-color-black, #000)" ${stroke(LINE, 1.2)}/>`;
+    for (const wx of [-6.2, 6.2]) {
+      s += `<circle cx="${sx(wx)}" cy="${sy(1.9)}" r="${1.9 * S}" fill="var(--sl-color-black, #000)" ${stroke(LINE, 1.2)}/>`;
+      s += `<circle cx="${sx(wx)}" cy="${sy(1.9)}" r="1.6" fill="${MID}"/>`;
+    }
+
+    // center of rotation
+    s += ln(sx(0), sy(0), sx(0), sy(12), `stroke="${DIM}" stroke-width="1" stroke-dasharray="2 3"`);
+    s += `<text x="${sx(0)}" y="${FLOOR + 33}" text-anchor="middle" class="ms-t">center of rotation</text>`;
+
+    // post and camera
+    const cosT = Math.cos(rad(th));
+    const sinT = Math.sin(rad(th));
+    const xp = D - 1.15 * cosT;
+    const yb = L + 1.15 * sinT;
+    if (xp > ROBOT_HALF) s += ln(sx(ROBOT_HALF), sy(3.1), sx(xp), sy(3.1), `stroke="${LINE}" stroke-width="2.5" stroke-linecap="round"`);
+    s += ln(sx(xp), sy(3.6), sx(xp), sy(yb), `stroke="${LINE}" stroke-width="2.5" stroke-linecap="round"`);
+    s +=
+      `<g transform="translate(${sx(D).toFixed(1)} ${sy(L).toFixed(1)}) rotate(${th})">` +
+      `<rect x="${-2.3 * S}" y="${-0.75 * S}" width="${2.3 * S}" height="${1.5 * S}" rx="2" fill="var(--sl-color-black, #000)" ${stroke(ACC, 1.4)}/>` +
+      `<rect x="0" y="${-0.4 * S}" width="2.2" height="${0.8 * S}" fill="${ACC}"/></g>`;
+
+    // edges of view and optical axis
+    const e1 = rayEnd(o, dirOf(aNear));
+    const e2 = rayEnd(o, dirOf(aFar));
+    const e0 = rayEnd(o, dirOf(th));
+    s += ln(sx(o[0]), sy(o[1]), sx(e1[0]), sy(e1[1]), `stroke="${ACC}" stroke-width="1"`);
+    s += ln(sx(o[0]), sy(o[1]), sx(e2[0]), sy(e2[1]), `stroke="${ACC}" stroke-width="1"`);
+    s += ln(sx(o[0]), sy(o[1]), sx(e0[0]), sy(e0[1]), `stroke="${ACC}" stroke-opacity="0.55" stroke-width="1" stroke-dasharray="5 4"`);
+
+    // pitch arc
+    const ox = sx(o[0]);
+    const oy = sy(o[1]);
+    s += ln(ox, oy, ox + 92, oy, `stroke="${MID}" stroke-width="1" stroke-dasharray="2 3"`);
+    if (th >= 1) {
+      const r = 54;
+      s += `<path d="M ${ox + r} ${oy} A ${r} ${r} 0 0 1 ${(ox + r * cosT).toFixed(1)} ${(oy + r * sinT).toFixed(1)}" ${stroke(LINE, 1.2)}/>`;
+      const m = rad(th / 2);
+      s += `<text x="${(ox + (r + 7) * Math.cos(m)).toFixed(1)}" y="${(oy + (r + 7) * Math.sin(m) + 4).toFixed(1)}" class="ms-t-big">θ ${Math.round(th)}°</text>`;
+    }
+
+    // H dimension
+    const hx = sx(-12);
+    s += ln(hx, FLOOR, hx, sy(L), `stroke="${LINE}" stroke-width="1"`);
+    s += ln(hx - 4, FLOOR, hx + 4, FLOOR, `stroke="${LINE}" stroke-width="1"`);
+    s += ln(hx - 4, sy(L), hx + 4, sy(L), `stroke="${LINE}" stroke-width="1"`);
+    s += ln(hx, sy(L), ox, sy(L), `stroke="${DIM}" stroke-width="1" stroke-dasharray="2 3"`);
+    const hy = (FLOOR + sy(L)) / 2;
+    s += `<text x="${hx - 6}" y="${hy - 2}" text-anchor="end" class="ms-t-big">H</text>`;
+    s += `<text x="${hx - 6}" y="${hy + 12}" text-anchor="end" class="ms-t ms-t-strong">${f1(L)} in</text>`;
+
+    // D dimension
+    if (D >= 0.5) {
+      const dy = sy(8.5);
+      s += ln(sx(0), dy, sx(D), dy, `stroke="${LINE}" stroke-width="1"`);
+      s += ln(sx(0), dy - 3, sx(0), dy + 3, `stroke="${LINE}" stroke-width="1"`);
+      s += ln(sx(D), dy - 3, sx(D), dy + 3, `stroke="${LINE}" stroke-width="1"`);
+      s += `<text x="${sx(Math.min(D, xp) - 0.6)}" y="${dy - 6}" text-anchor="end" class="ms-t ms-t-strong" style="font-size:11px;font-weight:600">D ${f1(D)} in</text>`;
+    }
+
+    // line of sight to the selected ball
+    if (sel && selGeom) {
+      const on = selGeom.inView;
+      s += ln(ox, oy, sx(sel.x), sy(BALL_R), `stroke="${on ? ACC : MID}" stroke-width="1" stroke-opacity="${on ? 0.9 : 0.6}" ${on ? '' : 'stroke-dasharray="3 3"'}`);
+    }
+    return s;
+  }
+
+  // ---- camera frame ------------------------------------------------------
+  function frameMarkup(st, items) {
+    const f2 = F / 2;
+    let s = `<defs><clipPath id="msFrameClip"><rect x="0" y="0" width="320" height="240"/></clipPath></defs>`;
+    s += `<rect width="320" height="240" fill="#0b0b0e"/>`;
+    const hr = 120 - f2 * Math.tan(rad(st.th));
+    const top = Math.max(0, hr);
+    if (top < 240) s += `<rect x="0" y="${top.toFixed(1)}" width="320" height="${(240 - top).toFixed(1)}" fill="#17171c"/>`;
+    if (hr > 0 && hr < 240) {
+      s += `<line x1="0" y1="${hr.toFixed(1)}" x2="320" y2="${hr.toFixed(1)}" stroke="#545861" stroke-width="1" stroke-dasharray="3 4"/>`;
+      s += `<text x="6" y="${(hr - 4).toFixed(1)}" fill="#888b96" font-size="9">horizon</text>`;
+    }
+    s += `<line x1="154" y1="120" x2="166" y2="120" stroke="#545861"/><line x1="160" y1="114" x2="160" y2="126" stroke="#545861"/>`;
+    const drawn = items
+      .filter((it) => it.g.row !== null && it.g.wpx !== null && it.g.col !== null)
+      .sort((a, b) => b.g.axis - a.g.axis); // far first so near balls sit on top
+    s += `<g clip-path="url(#msFrameClip)">`;
+    for (const { b, g } of drawn) {
+      const cx = g.col / 2;
+      const cy = g.row / 2;
+      const r = g.wpx / 4;
+      const k = g.inView ? KINDS[b.kind] : OFF;
+      s += `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r.toFixed(1)}" fill="${k.fill}" stroke="${k.edge}" stroke-width="1"/>`;
+      if (g.inView) s += `<rect x="${(cx - r - 3).toFixed(1)}" y="${(cy - r - 3).toFixed(1)}" width="${(2 * r + 6).toFixed(1)}" height="${(2 * r + 6).toFixed(1)}" fill="none" stroke="#fff" stroke-width="1"/>`;
+    }
+    s += `</g>`;
+    return s;
+  }
+
+  // ---- wiring ------------------------------------------------------------
+  function init(root) {
+    const st = { ...DEFAULTS };
+    let balls = [{ id: 1, x: 48, lat: 0, kind: 'pollen' }];
+    let nextId = 2;
+    let selId = 1;
+    const els = new Map();
+
+    const scene = root.querySelector('.ms-scene');
+    const dyn = root.querySelector('[data-layer="dynamic"]');
+    const layer = root.querySelector('[data-layer="balls"]');
+    const frame = root.querySelector('.ms-frame');
+    const out = (k) => root.querySelector(`[data-out="${k}"]`);
+    const inputs = root.querySelectorAll('[data-in]');
+    const addBtns = root.querySelectorAll('[data-add]');
+    const removeBtn = root.querySelector('[data-remove]');
+    const clampX = (v) => Math.min(86, Math.max(11, v));
+
+    function ballEl(b) {
+      let el = els.get(b.id);
+      if (el) return el;
+      const g = document.createElementNS(SVGNS, 'g');
+      g.setAttribute('class', 'ms-ball');
+      g.setAttribute('tabindex', '0');
+      g.setAttribute('role', 'slider');
+      g.setAttribute('aria-valuemin', '11');
+      g.setAttribute('aria-valuemax', '86');
+      const hit = document.createElementNS(SVGNS, 'circle');
+      hit.setAttribute('r', '16');
+      hit.setAttribute('fill', 'transparent');
+      const body = document.createElementNS(SVGNS, 'circle');
+      body.setAttribute('r', String(BALL_R * S));
+      body.setAttribute('data-ball', 'body');
+      const label = document.createElementNS(SVGNS, 'text');
+      label.setAttribute('text-anchor', 'middle');
+      label.setAttribute('class', 'ms-t ms-t-strong');
+      g.append(hit, body, label);
+      layer.appendChild(g);
+
+      const toInches = (clientX) => {
+        const r = scene.getBoundingClientRect();
+        return (((clientX - r.left) / r.width) * 800 - OX) / S + X_MIN;
+      };
+      g.addEventListener('pointerdown', (e) => {
+        selId = b.id;
+        if (layer.lastChild !== g) layer.appendChild(g);
+        g.setPointerCapture(e.pointerId);
+        b.x = clampX(toInches(e.clientX));
+        render();
+      });
+      g.addEventListener('pointermove', (e) => {
+        if (!g.hasPointerCapture(e.pointerId)) return;
+        b.x = clampX(toInches(e.clientX));
+        render();
+      });
+      g.addEventListener('focus', () => {
+        if (selId !== b.id) {
+          selId = b.id;
+          render();
+        }
+      });
+      g.addEventListener('keydown', (e) => {
+        const step = e.shiftKey ? 6 : 1;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowUp') b.x = clampX(b.x + step);
+        else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') b.x = clampX(b.x - step);
+        else if (e.key === 'Delete' || e.key === 'Backspace') {
+          removeSelected();
+          return;
+        } else return;
+        e.preventDefault();
+        render();
+      });
+      el = { g, body, hit, label };
+      els.set(b.id, el);
+      return el;
+    }
+
+    function addBall(kind) {
+      if (balls.length >= MAX_BALLS) return;
+      let x = 30;
+      while (balls.some((b) => Math.abs(b.x - x) < 4) && x < 84) x += 6;
+      const b = { id: nextId++, x, lat: LATS[balls.length % LATS.length], kind };
+      balls.push(b);
+      selId = b.id;
+      render();
+    }
+
+    function removeSelected() {
+      if (!balls.length) return;
+      const i = balls.findIndex((b) => b.id === selId);
+      balls.splice(i === -1 ? balls.length - 1 : i, 1);
+      selId = balls.length ? balls[balls.length - 1].id : null;
+      render();
+    }
+
+    function render() {
+      const items = balls.map((b) => ({ b, g: ballGeom(st, b) }));
+      const selItem = items.find((it) => it.b.id === selId) || null;
+
+      dyn.innerHTML = sceneMarkup(st, selItem && selItem.g, selItem && selItem.b);
+      frame.innerHTML = frameMarkup(st, items);
+
+      // ball elements in the scene
+      for (const [id, el] of els) {
+        if (!balls.some((b) => b.id === id)) {
+          el.g.remove();
+          els.delete(id);
+        }
+      }
+      for (const { b, g } of items) {
+        const el = ballEl(b);
+        const k = g.inView ? KINDS[b.kind] : OFF;
+        const cx = sx(b.x);
+        const cy = sy(BALL_R);
+        const picked = b.id === selId && balls.length > 1;
+        el.body.setAttribute('cx', cx);
+        el.body.setAttribute('cy', cy);
+        el.hit.setAttribute('cx', cx);
+        el.hit.setAttribute('cy', cy);
+        el.body.setAttribute('fill', k.fill);
+        el.body.setAttribute('stroke', picked ? '#fff' : k.edge);
+        el.body.setAttribute('stroke-width', picked ? '2' : '1.2');
+        el.body.setAttribute('stroke-dasharray', g.inView ? '' : '3 2');
+        el.label.setAttribute('x', cx);
+        el.label.setAttribute('y', cy - 17);
+        el.label.textContent = Math.round(b.x) + ' in';
+        el.g.setAttribute('aria-label', KINDS[b.kind].name + ' distance from robot center, inches');
+        el.g.setAttribute('aria-valuenow', String(Math.round(b.x)));
+      }
+      // draw the selected ball on top; skip if it already is (re-inserting would drop a drag)
+      if (selItem) {
+        const top = els.get(selItem.b.id).g;
+        if (layer.lastChild !== top) layer.appendChild(top);
+      }
+
+      // buttons
+      addBtns.forEach((btn) => (btn.disabled = balls.length >= MAX_BALLS));
+      removeBtn.disabled = !balls.length;
+
+      // slider readouts
+      out('h').textContent = f1(st.h) + ' in';
+      out('th').textContent = Math.round(st.th) + '°';
+      out('d').textContent = f1(st.d) + ' in';
+      for (const k of ['h', 'th']) {
+        const [lo, hi, u] = RANGES[k];
+        const note = root.querySelector(`[data-note="${k}"]`);
+        const off = st[k] < lo - 1e-9 || st[k] > hi + 1e-9;
+        note.textContent = (off ? 'Outside the suggested ' : 'Suggested ') + lo + '–' + hi + u;
+        note.classList.toggle('is-off', off);
+      }
+      root.querySelector('[data-note="d"]').textContent = 'Center of rotation to camera lens';
+
+      // coverage
+      const aNear = st.th + HALF;
+      const aFar = st.th - HALF;
+      const near = st.d + st.h / Math.tan(rad(aNear));
+      const far = aFar > 0.05 ? st.d + st.h / Math.tan(rad(aFar)) : Infinity;
+      out('range').textContent = dist(near) + ' to ' + (far === Infinity ? 'horizon' : dist(far));
+      const blind = near - ROBOT_HALF;
+      out('blind').textContent = blind > 0.5 ? Math.round(blind) + ' in' : 'none';
+      out('center').textContent = st.th > 0.5 ? dist(st.d + st.h / Math.tan(rad(st.th))) : 'never (level)';
+
+      const seen = items.filter((it) => it.g.inView);
+      out('ballStatus').textContent = selItem ? selItem.g.reason : 'none placed';
+      out('ballCount').textContent = seen.length + ' of ' + items.length;
+      out('ballPx').textContent = seen.length ? Math.round(Math.min(...seen.map((it) => it.g.wpx))) + ' px' : '–';
+      out('frameCap').textContent = items.length
+        ? `${seen.length} of ${items.length} ball${items.length === 1 ? '' : 's'} in frame.`
+        : 'No balls on the floor.';
+
+      out('code').textContent =
+        `CAMERA_HEIGHT = ${f1(st.h - BALL_R)};\n` +
+        `CAMERA_PITCH = Math.toRadians(${f1(st.th)});\n` +
+        `FORWARD_OFFSET = ${f1(st.d)};`;
+    }
+
+    inputs.forEach((el) => {
+      el.addEventListener('input', () => {
+        st[el.dataset.in] = parseFloat(el.value);
+        render();
+      });
+    });
+
+    addBtns.forEach((btn) => btn.addEventListener('click', () => addBall(btn.dataset.add)));
+    removeBtn.addEventListener('click', removeSelected);
+    root.querySelector('[data-clear]').addEventListener('click', () => {
+      balls = [];
+      selId = null;
+      render();
+    });
+
+    root.querySelector('[data-reset]').addEventListener('click', () => {
+      Object.assign(st, DEFAULTS);
+      inputs.forEach((el) => (el.value = String(st[el.dataset.in])));
+      balls = [{ id: nextId++, x: 48, lat: 0, kind: 'pollen' }];
+      selId = balls[0].id;
+      render();
+    });
+
+    const copyBtn = root.querySelector('[data-copy]');
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(out('code').textContent || '');
+        copyBtn.textContent = 'Copied';
+      } catch (e) {
+        copyBtn.textContent = 'Copy failed';
+      }
+      setTimeout(() => (copyBtn.textContent = 'Copy'), 1400);
+    });
+
+    render();
+  }
+
+  document.querySelectorAll('[data-mountsim]').forEach(init);
+</script>
