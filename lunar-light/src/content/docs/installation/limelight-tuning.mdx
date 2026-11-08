@@ -1,0 +1,209 @@
+---
+title: Limelight 3A Tuning Guide
+description: Learn how to optimize camera height, pitch angle, sensor gain, exposure, and confidence thresholds on your Limelight 3A dashboard.
+---
+
+import { Aside, Badge, Card, CardGrid, Code, Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+
+Tuning your **Limelight 3A** for Hive Vision involves two primary steps: **physical camera calibration** (height, pitch angle, forward offset) and **dashboard camera controls** (sensor gain, exposure, confidence cutoffs).
+
+Optimal tuning ensures maximum neural detection accuracy across varying competition field lighting conditions and allows Hive Vision distance algorithms (`CVConstants.java`) to accurately map 2D camera detections into 3D robot space.
+
+---
+
+## Physical Camera Mounting: Height & Pitch
+
+How you physically mount your Limelight 3A on the robot directly affects detection field-of-view (FOV) and distance calculation accuracy.
+
+### Recommended Mounting Specifications
+
+<CardGrid>
+  <Card title="Suggested Height (H)" icon="rocket">
+    **12.0" – 16.0"** above the field floor.
+
+    Mounting at this height provides a broad FOV while preventing robot mechanisms (intakes, slides) from obstructing the camera lens.
+  </Card>
+
+  <Card title="Suggested Pitch Angle (θ)" icon="setting">
+    **20.0° – 30.0°** downward pitch.
+
+    Angling the camera downward keeps game entities visible from close-range intake distance out to mid-field (~6–8 feet).
+  </Card>
+</CardGrid>
+
+<Aside type="note">
+  When populating `CVConstants.java`, measure your camera lens height from the floor and subtract `1.4"` (the calibrated center offset of pollen/nectar elements).
+</Aside>
+
+### Camera Mounting Geometry Diagram
+
+Below is a schematic diagram illustrating the camera height (H), downward pitch angle (θ), forward offset (D), and FOV projection onto the field floor:
+
+<div style={{ border: '1px solid rgba(245, 158, 11, 0.3)', borderRadius: '12px', padding: '1.5rem', backgroundColor: 'rgba(15, 23, 42, 0.6)', margin: '1.5rem 0', backdropFilter: 'blur(10px)' }}>
+  <svg viewBox="0 0 750 360" width="100%" height="auto" style={{ display: 'block' }}>
+    <defs>
+      <linearGradient id="fovGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.45" />
+        <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.05" />
+      </linearGradient>
+
+      <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="3" result="blur" />
+        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+      </filter>
+    </defs>
+
+    {/* Ground Plane */}
+    <line x1="50" y1="300" x2="720" y2="300" stroke="#334155" strokeWidth="3" />
+    <text x="710" y="325" fill="#94a3b8" fontSize="12" textAnchor="end">Field Floor (Ground Plane)</text>
+
+    {/* Field Tile Markers */}
+    <line x1="180" y1="295" x2="180" y2="305" stroke="#475569" strokeWidth="2" />
+    <line x1="340" y1="295" x2="340" y2="305" stroke="#475569" strokeWidth="2" />
+    <line x1="500" y1="295" x2="500" y2="305" stroke="#475569" strokeWidth="2" />
+    <line x1="660" y1="295" x2="660" y2="305" stroke="#475569" strokeWidth="2" />
+
+    {/* Robot Base */}
+    <rect x="80" y="240" width="140" height="60" rx="6" fill="#1e293b" stroke="#38bdf8" strokeWidth="2" />
+    <circle cx="110" cy="295" r="14" fill="#0f172a" stroke="#38bdf8" strokeWidth="2" />
+    <circle cx="190" cy="295" r="14" fill="#0f172a" stroke="#38bdf8" strokeWidth="2" />
+    <text x="150" y="270" fill="#f8fafc" fontSize="13" fontWeight="bold" textAnchor="middle">Robot Base</text>
+    <circle cx="150" cy="270" r="3" fill="#f59e0b" />
+    <text x="150" y="285" fill="#94a3b8" fontSize="10" textAnchor="middle">Center of Rotation</text>
+
+    {/* Camera Post */}
+    <line x1="190" y1="240" x2="190" y2="120" stroke="#f59e0b" strokeWidth="4" strokeDasharray="5,3" />
+
+    {/* Limelight 3A Module */}
+    <g transform="translate(190, 120) rotate(25)">
+      <rect x="-12" y="-18" width="34" height="36" rx="4" fill="#0f172a" stroke="#f59e0b" strokeWidth="2" filter="url(#glow)" />
+      <circle cx="16" cy="0" r="8" fill="#38bdf8" stroke="#ffffff" strokeWidth="1.5" />
+      <circle cx="16" cy="0" r="4" fill="#0284c7" />
+    </g>
+
+    {/* FOV Cone */}
+    <polygon points="190,120 680,240 520,300" fill="url(#fovGradient)" stroke="#f59e0b" strokeWidth="1.5" strokeDasharray="4,2" />
+
+    {/* Height Dimension (H) */}
+    <line x1="50" y1="300" x2="50" y2="120" stroke="#fbbf24" strokeWidth="1.5" />
+    <line x1="45" y1="300" x2="55" y2="300" stroke="#fbbf24" strokeWidth="1.5" />
+    <line x1="45" y1="120" x2="55" y2="120" stroke="#fbbf24" strokeWidth="1.5" />
+    <line x1="50" y1="120" x2="190" y2="120" stroke="#475569" strokeWidth="1" strokeDasharray="3,3" />
+    <text x="38" y="215" fill="#fbbf24" fontSize="13" fontWeight="bold" textAnchor="end">H = 14.5"</text>
+
+    {/* Forward Offset Dimension (D) */}
+    <line x1="150" y1="220" x2="190" y2="220" stroke="#38bdf8" strokeWidth="1.5" />
+    <line x1="150" y1="215" x2="150" y2="225" stroke="#38bdf8" strokeWidth="1.5" />
+    <line x1="190" y1="215" x2="190" y2="225" stroke="#38bdf8" strokeWidth="1.5" />
+    <text x="170" y="212" fill="#38bdf8" fontSize="11" fontWeight="bold" textAnchor="middle">D = 6.0"</text>
+
+    {/* Pitch Angle Arc (theta) */}
+    <line x1="190" y1="120" x2="330" y2="120" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3,3" />
+    <path d="M 240,120 A 50 50 0 0 1 235,141" fill="none" stroke="#f59e0b" strokeWidth="2" />
+    <text x="260" y="132" fill="#f59e0b" fontSize="13" fontWeight="bold">θ = 25° Pitch</text>
+
+    {/* Game Elements */}
+    <circle cx="560" cy="292" r="10" fill="#eab308" stroke="#ffffff" strokeWidth="1.5" filter="url(#glow)" />
+    <text x="560" y="275" fill="#eab308" fontSize="11" fontWeight="bold" textAnchor="middle">Yellow Pollen</text>
+
+    <circle cx="640" cy="292" r="10" fill="#ef4444" stroke="#ffffff" strokeWidth="1.5" filter="url(#glow)" />
+    <text x="640" y="275" fill="#ef4444" fontSize="11" fontWeight="bold" textAnchor="middle">Red Nectar</text>
+
+    {/* Diagram Title */}
+    <text x="375" y="30" fill="#f8fafc" fontSize="15" fontWeight="bold" textAnchor="middle">Limelight 3A Mounting Geometry & Target FOV</text>
+  </svg>
+</div>
+
+---
+
+## Limelight Dashboard Camera Settings
+
+Open your browser and navigate to `http://limelight.local:5801` to access the Limelight Web Dashboard. Adjust these parameters to match your venue's lighting environment.
+
+### 1. Sensor Gain (Room Brightness Adjustment)
+
+**Sensor Gain** acts as digital signal amplification. Adjust this setting based on ambient room brightness:
+
+<Tabs>
+  <TabItem label="Bright Field / Sunny Venue" icon="sun">
+    - **Suggested Sensor Gain**: `15 – 20`
+    - **Scenario**: Brightly lit competition arenas or venues with direct overhead spotlights.
+    - **Effect**: Low gain keeps the image crisp and minimizes visual noise/artifacts.
+  </TabItem>
+
+  <TabItem label="Standard Indoor Lighting" icon="laptop">
+    - **Suggested Sensor Gain**: `20 – 25` (Default Recommendation)
+    - **Scenario**: Standard school gymnasiums or classroom practice fields.
+    - **Effect**: Provides balanced brightness for neural detection without over-saturating target colors.
+  </TabItem>
+
+  <TabItem label="Dim Pit / Dark Space" icon="moon">
+    - **Suggested Sensor Gain**: `30 – 40`
+    - **Scenario**: Dim venue pit areas or low-light practice environments.
+    - **Effect**: Brightens dark areas so the neural model can detect entities at range.
+  </TabItem>
+</Tabs>
+
+<div style={{ border: '2px dashed #475569', borderRadius: '10px', padding: '1.5rem', textAlign: 'center', backgroundColor: 'rgba(255, 255, 255, 0.02)', margin: '1.5rem 0' }}>
+  <p style={{ fontWeight: '600', margin: '0 0 0.5rem 0', color: '#f59e0b' }}>📷 [ Dashboard Image Placeholder: Sensor Gain Control Slider ]</p>
+  <p style={{ fontSize: '0.875rem', color: '#94a3b8', margin: 0 }}>
+    Screenshot placeholder: Limelight dashboard camera controls panel showing Sensor Gain slider at ~20.
+  </p>
+</div>
+
+---
+
+### 2. Exposure Control (Preventing Motion Blur)
+
+**Exposure** dictates how long the camera sensor collects light for each frame:
+
+- **Recommended Value**: **`~2200 µs`** (microseconds).
+- **High-Speed Robot Driving**: Lower exposure to **`1500 – 1800 µs`**. Lower exposure reduces motion blur when the robot is strafing or turning rapidly.
+- **Low Light Environments**: Increase exposure slightly to **`2500 – 3000 µs`** if objects appear too dark.
+
+<div style={{ border: '2px dashed #475569', borderRadius: '10px', padding: '1.5rem', textAlign: 'center', backgroundColor: 'rgba(255, 255, 255, 0.02)', margin: '1.5rem 0' }}>
+  <p style={{ fontWeight: '600', margin: '0 0 0.5rem 0', color: '#f59e0b' }}>📷 [ Dashboard Image Placeholder: Exposure Setting & Frame Rate ]</p>
+  <p style={{ fontSize: '0.875rem', color: '#94a3b8', margin: 0 }}>
+    Screenshot placeholder: Limelight dashboard showing Exposure control tuned to ~2200µs with active FPS readout.
+  </p>
+</div>
+
+---
+
+### 3. Neural Confidence Cutoff Threshold
+
+The **Confidence Cutoff** sets the minimum probability required for Hive Vision to report a bounding box detection:
+
+- **Recommended Range**: **`0.30 – 0.40`** (30% to 40% confidence).
+- **If missing distant targets**: Lower confidence to **`0.25 – 0.30`**.
+- **If detecting false positives (shadows, field perimeter)**: Raise confidence to **`0.45 – 0.50`**.
+
+<div style={{ border: '2px dashed #475569', borderRadius: '10px', padding: '1.5rem', textAlign: 'center', backgroundColor: 'rgba(255, 255, 255, 0.02)', margin: '1.5rem 0' }}>
+  <p style={{ fontWeight: '600', margin: '0 0 0.5rem 0', color: '#f59e0b' }}>📷 [ Dashboard Image Placeholder: Neural Detector Confidence & Bounding Boxes ]</p>
+  <p style={{ fontSize: '0.875rem', color: '#94a3b8', margin: 0 }}>
+    Screenshot placeholder: Neural Detector stream displaying real-time bounding boxes with confidence scores (e.g. `yellow_pollen: 0.88`).
+  </p>
+</div>
+
+---
+
+## Code Synchronization (`CVConstants.java`)
+
+Once physical height, pitch, and forward offset are measured, update your robot's `CVConstants.java` file so Hive Vision pathing algorithms can accurately compute field targets:
+
+```java
+public class CVConstants {
+    // Measured height from floor to camera lens (inches) minus 1.4" object calibration offset
+    public static double CAMERA_HEIGHT = 14.5;
+
+    // Measured downward angle (in radians). Convert degrees using Math.toRadians()
+    public static double CAMERA_PITCH = Math.toRadians(25.0);
+
+    // Distance forward from center of robot rotation to camera lens (inches)
+    public static double FORWARD_OFFSET = 6.0;
+}
+```
+
+<Aside type="tip">
+  After completing physical and dashboard tuning, test your pipeline in TeleOp using the [Limelight TeleOp Driving](/reference/teleop) or [Limelight TeleOp Pathing](/reference/auto) code modules!
+</Aside>

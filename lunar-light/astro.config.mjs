@@ -192,6 +192,7 @@ export default defineConfig({
           label: 'Installation',
           items: [
             { label: 'Limelight 3A', slug: 'installation/limelight' },
+            { label: 'Limelight Tuning', slug: 'installation/limelight-tuning' },
             { label: 'Webcam', slug: 'installation/webcam'}
           ],
         },
