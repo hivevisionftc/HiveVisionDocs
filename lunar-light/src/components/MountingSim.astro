@@ -21,6 +21,11 @@
     <button type="button" class="ms-btn" data-add="blue"><i class="ms-dot" style="background:#3b82f6"></i>Add blue nectar</button>
     <button type="button" class="ms-btn" data-remove>Remove selected</button>
     <button type="button" class="ms-btn" data-clear>Clear</button>
+    <div class="ms-units" role="group" aria-label="Distance units">
+      <span class="ms-units-lab">Units</span>
+      <button type="button" class="ms-btn ms-unit is-on" data-unit="in" aria-pressed="true">in</button>
+      <button type="button" class="ms-btn ms-unit" data-unit="mm" aria-pressed="false">mm</button>
+    </div>
   </div>
   <p class="ms-hint">Drag a ball along the floor to see where it drops out of view. Distances are measured from the robot's center of rotation.</p>
 
@@ -75,10 +80,6 @@
       <div class="ms-code" data-out="code"></div>
     </div>
   </div>
-  <p class="ms-foot">
-    Drawn for a robot 18 in long, balls whose centers sit 1.4 in off the floor, and the Limelight 3A's 42° vertical view.
-    The far edge of the view is farther than the model can pick out a ball, so treat it as an upper bound.
-  </p>
 </div>
 
 <style is:global>
@@ -97,10 +98,7 @@
   }
   .mountsim * { margin: 0; }
   .mountsim .ms-scene { display: block; width: 100%; height: auto; }
-  .mountsim .ms-hint,
-  .mountsim .ms-foot { font-size: 0.78rem; line-height: 1.4; color: var(--ms-mid); }
-  .mountsim .ms-hint { margin-top: 8px; }
-  .mountsim .ms-foot { margin-top: 12px; color: var(--ms-dim); }
+  .mountsim .ms-hint { font-size: 0.78rem; line-height: 1.4; color: var(--ms-mid); margin-top: 8px; }
 
   .mountsim .ms-tools { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
   .mountsim .ms-dot {
@@ -171,6 +169,17 @@
   .mountsim .ms-btn:hover:not(:disabled) { border-color: var(--ms-mid); color: var(--ms-text); }
   .mountsim .ms-btn:disabled { opacity: 0.4; cursor: default; }
   .mountsim .ms-btn-small { font-size: 0.7rem; padding: 2px 8px; text-transform: none; letter-spacing: 0; }
+
+  .mountsim .ms-units { margin-left: auto; display: flex; align-items: center; gap: 4px; }
+  .mountsim .ms-units-lab {
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ms-mid);
+    margin-right: 2px;
+  }
+  .mountsim .ms-unit { min-width: 40px; text-align: center; align-self: center; }
+  .mountsim .ms-unit.is-on { border-color: var(--ms-accent); color: var(--ms-text); }
 
   .mountsim .ms-frame {
     display: block;
@@ -243,8 +252,27 @@
   const sx = (x) => OX + (x - X_MIN) * S;
   const sy = (y) => FLOOR - y * S;
   const f1 = (n) => n.toFixed(1);
-  const dist = (x) => (x > 480 ? 'beyond 40 ft' : x >= 120 ? (x / 12).toFixed(1) + ' ft' : Math.round(x) + ' in');
   const SVGNS = 'http://www.w3.org/2000/svg';
+
+  // unit helpers; state stays in inches, these only affect what is displayed
+  const MM = 25.4;
+  const U_NAME = { in: 'inches', mm: 'millimeters' };
+  const U_SHORT = { in: 'in', mm: 'mm' };
+  // 1 dp for inches; mm shows a decimal only for small values
+  const fmtU = (inch, u) =>
+    u === 'mm'
+      ? (Math.abs(inch * MM) < 100 ? (inch * MM).toFixed(1) : String(Math.round(inch * MM))) + ' mm'
+      : f1(inch) + ' in';
+  // whole numbers (ball labels, blind zone, axis ticks)
+  const fmtR = (inch, u) => (u === 'mm' ? Math.round(inch * MM) : Math.round(inch)) + ' ' + U_SHORT[u];
+  const dist = (x, u) => {
+    if (u === 'mm') {
+      if (x > 480) return 'beyond 12 m';
+      const mm = x * MM;
+      return mm >= 1000 ? (mm / 1000).toFixed(1) + ' m' : Math.round(mm) + ' mm';
+    }
+    return x > 480 ? 'beyond 40 ft' : x >= 120 ? (x / 12).toFixed(1) + ' ft' : Math.round(x) + ' in';
+  };
 
   function clipPoly(poly) {
     const planes = [
@@ -303,7 +331,7 @@
   }
 
   // ---- scene ---------------------------------------------------------------
-  function sceneMarkup(st, selGeom, sel) {
+  function sceneMarkup(st, selGeom, sel, u) {
     const { h: L, th, d: D } = st;
     const o = [D, L];
     const aNear = th + HALF;
@@ -327,16 +355,25 @@
 
     // 18 in size limit
     s += `<rect x="${sx(-ROBOT_HALF)}" y="${sy(18)}" width="${18 * S}" height="${18 * S}" ${stroke(DIM, 1, 'stroke-dasharray="3 3"')}/>`;
-    s += `<text x="${sx(-ROBOT_HALF)}" y="${sy(18) - 5}" class="ms-t">18 in limit</text>`;
+    s += `<text x="${sx(-ROBOT_HALF)}" y="${sy(18) - 5}" class="ms-t">${u === 'mm' ? '457 mm' : '18 in'} limit</text>`;
 
     // floor and ticks
     s += ln(sx(X_MIN), FLOOR, sx(X_MAX), FLOOR, `stroke="${MID}" stroke-width="1.5"`);
-    for (let x = 0; x <= 84; x += 12) {
-      const major = x % 24 === 0;
-      s += ln(sx(x), FLOOR, sx(x), FLOOR + (major ? 6 : 4), `stroke="${MID}" stroke-width="1"`);
-      s += `<text x="${sx(x)}" y="${FLOOR + 18}" text-anchor="middle" class="ms-t">${x}</text>`;
+    if (u === 'mm') {
+      for (let v = 0; v / MM <= 84; v += 250) {
+        const major = v % 500 === 0;
+        const xi = v / MM;
+        s += ln(sx(xi), FLOOR, sx(xi), FLOOR + (major ? 6 : 4), `stroke="${MID}" stroke-width="1"`);
+        s += `<text x="${sx(xi)}" y="${FLOOR + 18}" text-anchor="middle" class="ms-t">${v}</text>`;
+      }
+    } else {
+      for (let x = 0; x <= 84; x += 12) {
+        const major = x % 24 === 0;
+        s += ln(sx(x), FLOOR, sx(x), FLOOR + (major ? 6 : 4), `stroke="${MID}" stroke-width="1"`);
+        s += `<text x="${sx(x)}" y="${FLOOR + 18}" text-anchor="middle" class="ms-t">${x}</text>`;
+      }
     }
-    s += `<text x="${sx(X_MAX)}" y="${FLOOR + 50}" text-anchor="end" class="ms-t">inches from center of rotation</text>`;
+    s += `<text x="${sx(X_MAX)}" y="${FLOOR + 50}" text-anchor="end" class="ms-t">${U_NAME[u]} from center of rotation</text>`;
 
     // visible floor
     const nearHit = D + L / Math.tan(rad(aNear));
@@ -351,7 +388,7 @@
       s += ln(sx(ROBOT_HALF), y, sx(nearHit), y, `stroke="${LINE}" stroke-width="1"`);
       s += ln(sx(ROBOT_HALF), y - 3, sx(ROBOT_HALF), y + 3, `stroke="${LINE}" stroke-width="1"`);
       s += ln(sx(nearHit), y - 3, sx(nearHit), y + 3, `stroke="${LINE}" stroke-width="1"`);
-      s += `<text x="${(sx(ROBOT_HALF) + sx(nearHit)) / 2}" y="${y - 5}" text-anchor="middle" class="ms-t ms-t-strong">blind zone ${Math.round(blind)} in</text>`;
+      s += `<text x="${(sx(ROBOT_HALF) + sx(nearHit)) / 2}" y="${y - 5}" text-anchor="middle" class="ms-t ms-t-strong">blind zone ${fmtR(blind, u)}</text>`;
     }
 
     // robot side profile
@@ -404,7 +441,7 @@
     s += ln(hx, sy(L), ox, sy(L), `stroke="${DIM}" stroke-width="1" stroke-dasharray="2 3"`);
     const hy = (FLOOR + sy(L)) / 2;
     s += `<text x="${hx - 6}" y="${hy - 2}" text-anchor="end" class="ms-t-big">H</text>`;
-    s += `<text x="${hx - 6}" y="${hy + 12}" text-anchor="end" class="ms-t ms-t-strong">${f1(L)} in</text>`;
+    s += `<text x="${hx - 6}" y="${hy + 12}" text-anchor="end" class="ms-t ms-t-strong">${fmtU(L, u)}</text>`;
 
     // D dimension
     if (D >= 0.5) {
@@ -412,7 +449,7 @@
       s += ln(sx(0), dy, sx(D), dy, `stroke="${LINE}" stroke-width="1"`);
       s += ln(sx(0), dy - 3, sx(0), dy + 3, `stroke="${LINE}" stroke-width="1"`);
       s += ln(sx(D), dy - 3, sx(D), dy + 3, `stroke="${LINE}" stroke-width="1"`);
-      s += `<text x="${sx(Math.min(D, xp) - 0.6)}" y="${dy - 6}" text-anchor="end" class="ms-t ms-t-strong" style="font-size:11px;font-weight:600">D ${f1(D)} in</text>`;
+      s += `<text x="${sx(Math.min(D, xp) - 0.6)}" y="${dy - 6}" text-anchor="end" class="ms-t ms-t-strong" style="font-size:11px;font-weight:600">D ${fmtU(D, u)}</text>`;
     }
 
     // line of sight to the selected ball
@@ -458,6 +495,11 @@
     let balls = [{ id: 1, x: 48, lat: 0, kind: 'pollen' }];
     let nextId = 2;
     let selId = 1;
+    let unit = 'in';
+    try {
+      const saved = localStorage.getItem('ms-unit');
+      if (saved === 'mm' || saved === 'in') unit = saved;
+    } catch (e) {}
     const els = new Map();
 
     const scene = root.querySelector('.ms-scene');
@@ -468,7 +510,45 @@
     const inputs = root.querySelectorAll('[data-in]');
     const addBtns = root.querySelectorAll('[data-add]');
     const removeBtn = root.querySelector('[data-remove]');
+    const unitBtns = root.querySelectorAll('[data-unit]');
     const clampX = (v) => Math.min(86, Math.max(11, v));
+
+    // slider geometry in inches, captured once so unit flips can rescale them
+    const spec = {};
+    inputs.forEach((el) => {
+      spec[el.dataset.in] = {
+        min: parseFloat(el.min),
+        max: parseFloat(el.max),
+        step: parseFloat(el.step),
+      };
+    });
+    const conv = (v) => (unit === 'mm' ? Math.round(v * MM * 100) / 100 : v);
+
+    function syncSliders() {
+      inputs.forEach((el) => {
+        const k = el.dataset.in;
+        const s = spec[k];
+        if (k === 'th') {
+          el.min = String(s.min);
+          el.max = String(s.max);
+          el.step = String(s.step);
+          el.value = String(st.th);
+          return;
+        }
+        el.min = String(conv(s.min));
+        el.max = String(conv(s.max));
+        el.step = String(conv(s.step));
+        el.value = String(conv(st[k]));
+      });
+    }
+
+    function syncUnitBtns() {
+      unitBtns.forEach((b) => {
+        const on = b.dataset.unit === unit;
+        b.classList.toggle('is-on', on);
+        b.setAttribute('aria-pressed', String(on));
+      });
+    }
 
     function ballEl(b) {
       let el = els.get(b.id);
@@ -551,7 +631,7 @@
       const items = balls.map((b) => ({ b, g: ballGeom(st, b) }));
       const selItem = items.find((it) => it.b.id === selId) || null;
 
-      dyn.innerHTML = sceneMarkup(st, selItem && selItem.g, selItem && selItem.b);
+      dyn.innerHTML = sceneMarkup(st, selItem && selItem.g, selItem && selItem.b, unit);
       frame.innerHTML = frameMarkup(st, items);
 
       // ball elements in the scene
@@ -577,9 +657,11 @@
         el.body.setAttribute('stroke-dasharray', g.inView ? '' : '3 2');
         el.label.setAttribute('x', cx);
         el.label.setAttribute('y', cy - 17);
-        el.label.textContent = Math.round(b.x) + ' in';
-        el.g.setAttribute('aria-label', KINDS[b.kind].name + ' distance from robot center, inches');
-        el.g.setAttribute('aria-valuenow', String(Math.round(b.x)));
+        el.label.textContent = fmtR(b.x, unit);
+        el.g.setAttribute('aria-label', KINDS[b.kind].name + ' distance from robot center, ' + U_NAME[unit]);
+        el.g.setAttribute('aria-valuemin', String(conv(11)));
+        el.g.setAttribute('aria-valuemax', String(conv(86)));
+        el.g.setAttribute('aria-valuenow', String(unit === 'mm' ? Math.round(b.x * MM) : Math.round(b.x)));
       }
       // draw the selected ball on top; skip if it already is (re-inserting would drop a drag)
       if (selItem) {
@@ -592,14 +674,20 @@
       removeBtn.disabled = !balls.length;
 
       // slider readouts
-      out('h').textContent = f1(st.h) + ' in';
+      out('h').textContent = fmtU(st.h, unit);
       out('th').textContent = Math.round(st.th) + '°';
-      out('d').textContent = f1(st.d) + ' in';
+      out('d').textContent = fmtU(st.d, unit);
       for (const k of ['h', 'th']) {
-        const [lo, hi, u] = RANGES[k];
+        const [lo, hi] = RANGES[k];
         const note = root.querySelector(`[data-note="${k}"]`);
         const off = st[k] < lo - 1e-9 || st[k] > hi + 1e-9;
-        note.textContent = (off ? 'Outside the suggested ' : 'Suggested ') + lo + '–' + hi + u;
+        const range =
+          k === 'th'
+            ? `${lo}–${hi}°`
+            : unit === 'mm'
+              ? `${Math.round(lo * MM)}–${Math.round(hi * MM)} mm`
+              : `${lo}–${hi} in`;
+        note.textContent = (off ? 'Outside the suggested ' : 'Suggested ') + range;
         note.classList.toggle('is-off', off);
       }
       root.querySelector('[data-note="d"]').textContent = 'Center of rotation to camera lens';
@@ -609,10 +697,11 @@
       const aFar = st.th - HALF;
       const near = st.d + st.h / Math.tan(rad(aNear));
       const far = aFar > 0.05 ? st.d + st.h / Math.tan(rad(aFar)) : Infinity;
-      out('range').textContent = dist(near) + ' to ' + (far === Infinity ? 'horizon' : dist(far));
+      out('range').textContent = dist(near, unit) + ' to ' + (far === Infinity ? 'horizon' : dist(far, unit));
       const blind = near - ROBOT_HALF;
-      out('blind').textContent = blind > 0.5 ? Math.round(blind) + ' in' : 'none';
-      out('center').textContent = st.th > 0.5 ? dist(st.d + st.h / Math.tan(rad(st.th))) : 'never (level)';
+      out('blind').textContent = blind > 0.5 ? fmtR(blind, unit) : 'none';
+      out('center').textContent =
+        st.th > 0.5 ? dist(st.d + st.h / Math.tan(rad(st.th)), unit) : 'never (level)';
 
       const seen = items.filter((it) => it.g.inView);
       out('ballStatus').textContent = selItem ? selItem.g.reason : 'none placed';
@@ -630,10 +719,23 @@
 
     inputs.forEach((el) => {
       el.addEventListener('input', () => {
-        st[el.dataset.in] = parseFloat(el.value);
+        const v = parseFloat(el.value);
+        st[el.dataset.in] = el.dataset.in === 'th' ? v : unit === 'mm' ? v / MM : v;
         render();
       });
     });
+
+    unitBtns.forEach((btn) =>
+      btn.addEventListener('click', () => {
+        unit = btn.dataset.unit === 'mm' ? 'mm' : 'in';
+        try {
+          localStorage.setItem('ms-unit', unit);
+        } catch (e) {}
+        syncUnitBtns();
+        syncSliders();
+        render();
+      })
+    );
 
     addBtns.forEach((btn) => btn.addEventListener('click', () => addBall(btn.dataset.add)));
     removeBtn.addEventListener('click', removeSelected);
@@ -645,7 +747,7 @@
 
     root.querySelector('[data-reset]').addEventListener('click', () => {
       Object.assign(st, DEFAULTS);
-      inputs.forEach((el) => (el.value = String(st[el.dataset.in])));
+      syncSliders();
       balls = [{ id: nextId++, x: 48, lat: 0, kind: 'pollen' }];
       selId = balls[0].id;
       render();
@@ -662,6 +764,8 @@
       setTimeout(() => (copyBtn.textContent = 'Copy'), 1400);
     });
 
+    syncUnitBtns();
+    syncSliders();
     render();
   }
 
